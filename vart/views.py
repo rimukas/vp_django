@@ -11,16 +11,20 @@ from braces import views
 
 class HomePageView(generic.TemplateView):
     template_name = 'home.html'
+    def get_context_data(self, **kwargs):
+        context = super(HomePageView, self).get_context_data(**kwargs)
+        context['visas_vardas'] = ''
+        return context
 
 
-class SignUpView(generic.CreateView, views.AnonymousRequiredMixin, views.FormValidMessageMixin):
+class SignUpView(views.AnonymousRequiredMixin, views.FormValidMessageMixin, generic.CreateView):
     form_valid_message = 'Tu sekmingai prisiregistravai!'
     form_class = RegistrationForm
     model = User
     template_name = 'accounts/signup.html'
 
 
-class LoginView(generic.FormView, views.AnonymousRequiredMixin, views.FormValidMessageMixin):
+class LoginView(views.AnonymousRequiredMixin, views.FormValidMessageMixin, generic.FormView):
     form_valid_message = 'Tu prisiloginai!'
     form_class = LoginForm
     success_url = reverse_lazy('home')
@@ -38,7 +42,7 @@ class LoginView(generic.FormView, views.AnonymousRequiredMixin, views.FormValidM
             return self.form_invalid(form)
 
 
-class LogOutView(generic.RedirectView, views.LoginRequiredMixin, views.MessageMixin):
+class LogOutView(views.LoginRequiredMixin, views.MessageMixin, generic.RedirectView):
     url = reverse_lazy('home')
 
     def get(self, request, *args, **kwargs):

@@ -3,5 +3,8 @@
 {% block headline %}<h1>Welcome to the PyCon Survival Guide!</h1>{% endblock headline %}
 
 {% block content %}
-<p>Howdy{% if user.is_authenticated %} {{ user.username }}{% endif %}!</p>
+<p>{% if user.is_authenticated %} Prisijungęs vartotojas: <b> {{ user.get_full_name|default:user.username}} </b> {% endif %}</p>
+{% for version in version_list %}
+    {{ version.user }} wrote version {{ version }}
+{% endfor %}
 {% endblock %}
