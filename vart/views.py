@@ -9,8 +9,8 @@ from django.shortcuts import render
 from django.views import generic
 from braces import views
 from .models import Planas
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+# from django.contrib.auth.decorators import login_required
+# from django.utils.decorators import method_decorator
 # from django.views.generic.edit import CreateView
 
 
@@ -85,13 +85,6 @@ def KodasView(request, kodas_nr):
 
 
 '''
-def PlanasAdd(request):
-    form = PlanasAddForm(initial={'organizatorius': request.user.username})
-#    form.initial = {'organizatorius': 'rimas'}
-    return render(request, 'planas_create.html', {'form': form})
-'''
-
-
 class PlanasAdd(generic.edit.CreateView):
     model = Planas
     fields = ['kodas', 'preke', 'islaidos']
@@ -103,10 +96,19 @@ class PlanasAdd(generic.edit.CreateView):
     def form_valid(self, form):
         form.instance.organizatorius = self.request.user
         return super(PlanasAdd, self).form_valid(form)
-
-
 '''
+
+
+class PlanasAdd(
+        views.LoginRequiredMixin,
+        views.FormValidMessageMixin,
+        generic.edit.CreateView):    
     form_class = PlanasAddForm
-    form_valid_message = 'Nauja plano eilute ivesta sekmingai!'
+    form_valid_message = 'Nauja plano eilutė įvesta sėkmingai!'
     template_name = 'planas_create.html'
-'''
+    success_url = reverse_lazy('planas_add')
+   
+ 
+    def form_valid(self, form):
+        form.instance.organizatorius = self.request.user        
+        return super(PlanasAdd, self).form_valid(form)

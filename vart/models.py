@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-
+'''
 class Vartotojai(models.Model):
     organizatorius = models.CharField(max_length=50, unique=True)
     pareigos = models.CharField(max_length=200)
@@ -17,6 +17,7 @@ class Vartotojai(models.Model):
 
     def __str__(self):
         return self.organizatorius
+'''
 
 
 class Planas(models.Model):
@@ -26,7 +27,7 @@ class Planas(models.Model):
     organizatorius = models.ForeignKey(User,
             to_field='username',
             on_delete=models.CASCADE)
-    kodas = models.CharField(max_length=30)
+    kodas = models.CharField(max_length=30, unique=True)
     preke = models.CharField(max_length=100, verbose_name='Prekė, paslauga, darbas')
     islaidos = models.DecimalField(max_digits=9, decimal_places=2)
     paslauga_darbas_preke = models.CharField(max_length=8,
@@ -36,6 +37,7 @@ class Planas(models.Model):
     class Meta:
         verbose_name = "Planas"
         verbose_name_plural = "Planas"
+        ordering = ['kodas']
 
     def __str__(self):
-        return self.preke
+        return self.kodas + ': ' + self.preke

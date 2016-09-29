@@ -45,10 +45,10 @@ class PlanasAddForm(forms.ModelForm):
         fields = ['kodas', 'preke', 'islaidos', 'paslauga_darbas_preke']
 
     def __init__(self, *args, **kwargs):
-#        self.user = kwargs.pop('user',None)
+
         super(PlanasAddForm, self).__init__(*args, **kwargs)
-#        self.fields['organizatorius'].initial = 'redas'
-        self.helper = FormHelper(self)
+
+        self.helper = FormHelper()
 
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
@@ -59,6 +59,9 @@ class PlanasAddForm(forms.ModelForm):
             'islaidos',
             'paslauga_darbas_preke',
             ButtonHolder(
-                Submit('add', 'Irasyti', css_class='btn-primary')
+                Submit('add', 'Įrašyti', css_class='btn-primary')
                 ),
             )
+
+    def kodas_ivestas(self):
+        return 'kodas ivestas gerai'
