@@ -1,0 +1,29 @@
+{% extends '_layouts/base.html' %}
+
+{% block headline %}<h1>Welcome to the PyCon Survival Guide!</h1>{% endblock headline %}
+
+{% block content %}
+<a href="kodas_add">Pridėti naują prekę/paslaugą/darbą</a>
+
+<table style="width:100%">
+<tr>
+    <th>Kodas</th>
+    <th>Prekės, paslaugos pavadinimas</th>
+    <th>Numatomos išlaidos, EUR</th>
+  </tr>
+{% for k in kodas %}
+<tr>
+<td><a href={{ k.kodas }}>{{ k.kodas}}</a></td>
+<td>{{ k.preke}}</td>
+<td>{{ k.islaidos}}</td>
+</tr>
+{% endfor %}
+
+</p>
+</table>
+
+
+{% for version in version_list %}
+    {{ version.user }} wrote version {{ version }}
+{% endfor %}
+{% endblock %}

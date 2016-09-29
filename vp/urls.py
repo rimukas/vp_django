@@ -16,16 +16,25 @@ Including another URLconf
 
 from django.conf.urls import url
 from django.contrib import admin
-from vart.views import HomePageView
-from vart.views import SignUpView
-from vart.views import LoginView
-from vart.views import LogOutView
+from vart import views
+#from vart.views import HomePageView
+#from vart.views import SignUpView
+#from vart.views import LoginView
+#from vart.views import LogOutView
+#from vart.views import PlanasView
+#from vart.views import KodasView
+#from vart.views import Planas
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url('^$', HomePageView.as_view(), name='home'),
-    url(r'^accounts/register/$', SignUpView.as_view(), name='signup'),
-    url(r'^accounts/login/$', LoginView.as_view(), name='login'),
-    url(r'^accounts/logout/$', LogOutView.as_view(), name='logout'),
+    url('^$', views.HomePageView.as_view(), name='home'),
+    url('^home/', views.HomePageView.as_view(), name='home'),
+    url(r'^accounts/register/$', views.SignUpView.as_view(), name='signup'),
+    url(r'^accounts/login/$', views.LoginView.as_view(), name='login'),
+    url(r'^accounts/logout/$', views.LogOutView.as_view(), name='logout'),
+    url(r'^planas/$', views.PlanasView, name='planas'),
+    url(r'^planas/([0-9-]+)$', views.KodasView, name='planas'),
+   # url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
+    url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
 ]

@@ -24,7 +24,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">PyCon Survival Guide</a>
+          <a class="navbar-brand" href="/">Viešieji pirkimai</a>
         </div>
         <div class="navbar-collapse collapse">
         {% if not user.is_authenticated %}
@@ -33,9 +33,11 @@
 {% else %}
 <a href="{% url 'logout' %}" class="btn btn-default navbar-btn">Logout</a>
 {% endif %}
-        </div><!--/.navbar-collapse -->
-      </div>
+        </div><!--/.navbar-collapse -->         
+      </div>      
     </div>
+    <div align="right">{% if user.is_authenticated %} <b> {{ user.get_full_name|default:user.username}} {% endif %}</b> </div>
+
     {% if messages %}
 <ul class="messages">
     {% for message in messages %}

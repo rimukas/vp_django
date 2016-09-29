@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -21,11 +23,11 @@ class Planas(models.Model):
     PDP = (('paslauga', 'Paslauga'),
         ('darbas', 'Darbas'),
         ('preke', 'Prekė'))
-    organizatorius = models.ForeignKey(Vartotojai,
-            to_field='organizatorius',
+    organizatorius = models.ForeignKey(User,
+            to_field='username',
             on_delete=models.CASCADE)
     kodas = models.CharField(max_length=30)
-    preke = models.CharField(max_length=100)
+    preke = models.CharField(max_length=100, verbose_name='Prekė, paslauga, darbas')
     islaidos = models.DecimalField(max_digits=9, decimal_places=2)
     paslauga_darbas_preke = models.CharField(max_length=8,
         default='preke',
