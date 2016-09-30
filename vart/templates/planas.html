@@ -1,18 +1,30 @@
 {% extends '_layouts/base.html' %}
 
-{% block headline %}<h1>Welcome to the PyCon Survival Guide!</h1>{% endblock headline %}
+{% block headline %}<h2><strong>Viešųjų pirkimų planas</strong></h2>{% endblock headline %}
 
 {% block content %}
-<a href="kodas_add">Pridėti naują prekę/paslaugą/darbą</a>
+<a class="btn btn-default" href="kodas_add">Pridėti naują prekę/paslaugą/darbą</a>
 
-<table style="width:100%">
+<table style="width:100%" class="table table-hover">
 <tr>
+	<th></th>
     <th>Kodas</th>
     <th>Prekės, paslaugos pavadinimas</th>
     <th>Numatomos išlaidos, EUR</th>
   </tr>
 {% for k in kodas %}
 <tr>
+<td>
+<a class="btn btn-primary" role="button" href="{% url 'planas_update' kodas=k.kodas %}">
+		<span class="glyphicon glyphicon-pencil"></span>
+	</a>
+
+<a class="btn btn-danger" role="button" href="{% url 'planas_delete_confirm' kodas=k.kodas %}">
+		<span class="glyphicon glyphicon-remove"></span>
+	</a>	
+		
+</td>
+
 <td><a href={{ k.kodas }}>{{ k.kodas}}</a></td>
 <td>{{ k.preke}}</td>
 <td>{{ k.islaidos}}</td>

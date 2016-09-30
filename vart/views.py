@@ -1,8 +1,6 @@
-from .forms import PlanasAddForm
-from .forms import RegistrationForm
+from .forms import PlanasAddForm, RegistrationForm, PlanasUpdateForm, LoginForm, PlanasDeleteForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse_lazy
-from .forms import LoginForm
 # from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render
@@ -102,13 +100,49 @@ class PlanasAdd(generic.edit.CreateView):
 class PlanasAdd(
         views.LoginRequiredMixin,
         views.FormValidMessageMixin,
-        generic.edit.CreateView):    
+        generic.edit.CreateView):
     form_class = PlanasAddForm
     form_valid_message = 'Nauja plano eilutė įvesta sėkmingai!'
     template_name = 'planas_create.html'
     success_url = reverse_lazy('planas_add')
-   
- 
+
     def form_valid(self, form):
-        form.instance.organizatorius = self.request.user        
+        form.instance.organizatorius = self.request.user
         return super(PlanasAdd, self).form_valid(form)
+
+
+class PlanasUpdate(
+        views.LoginRequiredMixin,
+        views.FormValidMessageMixin,
+        generic.edit.UpdateView):
+    form_class = PlanasUpdateForm
+    form_valid_message = 'Planas pataisytas!'
+    template_name = 'planas_create.html'
+    success_url = reverse_lazy('planas')
+
+    def get_object(self, queryset=None):
+        obj = Planas.objects.get(kodas=self.kwargs['kodas'])
+        return obj
+
+
+def planas_delete_confirm(request, kodas):
+    context = {"kodas": Planas.objects.get(kodas=kodas)}
+    # return render(request, 'kodas_view.html', context)
+    return render(request, 'planas_delete_form.html', context)
+
+
+class PlanasDelete(
+        views.LoginRequiredMixin,
+        views.FormValidMessageMixin,
+        generic.edit.DeleteView):
+    # form_class = PlanasDeleteForm
+    # form_valid_message = 'Planas pataisytas!'
+    template_name = 'planas_delete_form.html'
+    model = Planas
+    form_valid_message = 'Kodas sėkmingai ištrintas.'
+
+    success_url = reverse_lazy('planas')
+
+    def get_object(self, queryset=None):
+        obj = Planas.objects.get(kodas=self.kwargs['kodas'])
+        return obj
