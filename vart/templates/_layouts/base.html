@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>{% block title %}PyCon Survival Guide{% endblock title %}</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap.min.css">
     <style>
         body {
             padding-bottom: 20px;
@@ -15,6 +16,23 @@
     {% block css %}{% endblock css %}
 </head>
 <body>
+
+<!-- jQuery CDN -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <!-- jQuery local fallback -->
+  <script>window.jQuery || document.write('<script src="/static/vart/jquery.min.js"><\/script>')</script>
+  <!-- Bootstrap JS CDN -->
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Bootstrap JS local fallback -->
+  <script>if(typeof($.fn.modal) === 'undefined') {document.write('<script src="/static/vart/bootstrap.min.js"><\/script>')}</script>
+  <!-- Bootstrap CSS local fallback -->
+  <script>
+    $(document).ready(function() {
+    var bodyColor = $('body').css('color');
+    if(bodyColor != 'rgb(51, 51, 51)') {
+    $("head").prepend('<link rel="stylesheet" href="/static/vart/css/bootstrap.min.css">');}});
+  </script>
+
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">

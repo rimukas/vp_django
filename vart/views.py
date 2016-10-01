@@ -126,11 +126,25 @@ class PlanasUpdate(
 
 
 def planas_delete_confirm(request, kodas):
+    k = Planas.objects.get(kodas=kodas)
+    u = User.objects.get(username='deleted')
+    k.organizatorius = u
+    k.save()
+
+    current_user = request.user.username
+    context = {
+        'current_user': current_user,
+        'kodas': Planas.objects.filter(
+            organizatorius_id=current_user).values()}
+    return render(request, 'planas.html', context)
+
+'''
+def planas_delete_confirm(request, kodas):
     context = {"kodas": Planas.objects.get(kodas=kodas)}
     # return render(request, 'kodas_view.html', context)
     return render(request, 'planas_delete_form.html', context)
-
-
+'''
+'''
 class PlanasDelete(
         views.LoginRequiredMixin,
         views.FormValidMessageMixin,
@@ -146,3 +160,4 @@ class PlanasDelete(
     def get_object(self, queryset=None):
         obj = Planas.objects.get(kodas=self.kwargs['kodas'])
         return obj
+'''
