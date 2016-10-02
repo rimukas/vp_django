@@ -1,11 +1,12 @@
 {% extends '_layouts/base.html' %}
 
-{% block headline %}<h1>Welcome to the PyCon Survival Guide!</h1>{% endblock headline %}
+{% block headline %}<h1>Viešųjų pirkimų žurnalas</h1>{% endblock headline %}
 
 {% block content %}
 <p></b> 
 <p>
-<a href="planas">Planas</a>
+<a class="btn btn-default" href="planas">Mano planas</a>
+<a class="btn btn-default" href="mano_sutartis">Mano sutartys</a>
 
 {% for version in version_list %}
     {{ version.user }} wrote version {{ version }}

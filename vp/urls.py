@@ -36,7 +36,9 @@ urlpatterns = [
     url(r'^planas/$', views.PlanasView, name='planas'),
     url(r'^planas/(?P<kodas>\d+)/$', views.PlanasUpdate.as_view(), name='planas_update'),
     url(r'^planas/delete/(?P<kodas>\d+)/$', views.planas_delete_confirm, name='planas_delete_confirm'),
+    url(r'^planas/delete/del/(?P<kodas>\d+)/$', views.planas_delete, name='planas_delete'),
     # url(r'^planas/delete/del/(?P<kodas>\d+)/$', views.PlanasDelete.as_view(), name='planas_delete'),
     # url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
     url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
+    url(r'^mano_sutartis/$', views.SutartisView, name='sutartis_view'),
 ]

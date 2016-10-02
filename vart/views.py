@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.views import generic
 from braces import views
-from .models import Planas
+from .models import Planas, Sutartis
 # from django.contrib.auth.decorators import login_required
 # from django.utils.decorators import method_decorator
 # from django.views.generic.edit import CreateView
@@ -125,12 +125,25 @@ class PlanasUpdate(
         return obj
 
 
+# Is tiesu plano neistrina, o tik priskiria ji vartotojui "delete",
+# tad reikalui esant ji vel galima atstatyti ar priskirti kitam vartotojui
 def planas_delete_confirm(request, kodas):
-    k = Planas.objects.get(kodas=kodas)
-    u = User.objects.get(username='deleted')
-    k.organizatorius = u
-    k.save()
+    kodas = Planas.objects.get(kodas=kodas)
+    return render(request, 'planas_delete_confirm.html', {'kodas': kodas})
 
+
+# Is tiesu plano neistrina, o tik priskiria ji vartotojui "delete",
+# tad reikalui esant ji vel galima atstatyti ar priskirti kitam vartotojui
+def planas_delete(request, kodas):
+    # naujas Plano objektas su kodu, perduotu per nuoroda
+    k = Planas.objects.get(kodas=kodas)
+    # naujas User objektas, kurio vardas "delete"
+    u = User.objects.get(username='deleted')
+    # "delete" vartotojui priskiriam perduota koda
+    k.organizatorius = u
+    # saugo duombazeje
+    k.save()
+    # permetam i puslapi "planas.html"
     current_user = request.user.username
     context = {
         'current_user': current_user,
@@ -138,6 +151,8 @@ def planas_delete_confirm(request, kodas):
             organizatorius_id=current_user).values()}
     return render(request, 'planas.html', context)
 
+
+# uzkomentuotas tikras Planas eilutes pasalinimas is duombazes
 '''
 def planas_delete_confirm(request, kodas):
     context = {"kodas": Planas.objects.get(kodas=kodas)}
@@ -161,3 +176,16 @@ class PlanasDelete(
         obj = Planas.objects.get(kodas=self.kwargs['kodas'])
         return obj
 '''
+# -----------------------------
+
+
+def SutartisView(request):
+    # current_user = request.user.get_full_name()
+    current_user = request.user.username
+    kodas = Planas.objects.filter(organizatorius=current_user)
+    context = {
+        'current_user': current_user,
+        'kodas': Sutartis.objects.filter(
+         kodas_id__in=kodas).values()}
+
+    return render(request, 'sutartis.html', context)

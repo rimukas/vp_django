@@ -1,0 +1,50 @@
+{% extends '_layouts/base.html' %}
+
+{% block headline %}<h2><strong>Viešųjų pirkimų planas</strong></h2>{% endblock headline %}
+
+{% block content %}
+<a class="btn btn-default" href="kodas_add">Pridėti naują sutartį</a>
+
+<table style="width:100%" class="table table-hover">
+<tr>
+    <th></th>
+    <th>Kodas</th>
+    <th>Data</th>
+    <th>Numatoma suma, EUR</th>
+    <th>Tiekėjo kodas</th>
+    <th>Tiekėjas</th>
+    <th>Pastaba (nebūtina)</th>
+    <th>Ar tai žalias pirkimas?</th>
+  </tr>
+{% for k in kodas %}
+<tr>
+<td>
+<a class="btn btn-primary" role="button" href="#">
+        <span class="glyphicon glyphicon-pencil"></span>
+    </a>
+
+<a class="btn btn-danger" role="button" href="#">
+        <span class="glyphicon glyphicon-remove"></span>
+    </a>    
+        
+</td>
+
+<td><a href={{ k.kodas }}>{{ k.kodas_id }}</a></td>
+
+<td>{{ k.data|date:"Y-m-d"}}</td>
+<td>{{ k.suma}}</td>
+<td>{{ k.tiekejo_kodas}}</td>
+<td>{{ k.tiekejas}}</td>
+<td>{{ k.pastaba}}</td>
+<td>{{ k.zalias|yesno:"taip, ne, ne"}}</td>
+</tr>
+{% endfor %}
+
+</p>
+</table>
+
+
+{% for version in version_list %}
+    {{ version.user }} wrote version {{ version }}
+{% endfor %}
+{% endblock %}
