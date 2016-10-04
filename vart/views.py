@@ -1,6 +1,6 @@
-from .forms import PlanasAddForm, RegistrationForm, PlanasUpdateForm, LoginForm, PlanasDeleteForm
+from .forms import PlanasAddForm, RegistrationForm, PlanasUpdateForm, LoginForm, SutartisUpdateForm, PlanasDeleteForm
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 # from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render
@@ -17,7 +17,8 @@ class HomePageView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
-        context['visas_vardas'] = ''
+        user_name = self.request.user.username
+        context['kodai'] = Planas.objects.filter(organizatorius=user_name)
         return context
 
 
@@ -65,7 +66,7 @@ class LogOutView(
         return super(LogOutView, self).get(request, *args, **kwargs)
 
 
-def PlanasView(request):
+def planas_view(request):
     # current_user = request.user.get_full_name()
     current_user = request.user.username
     context = {
@@ -75,7 +76,7 @@ def PlanasView(request):
     return render(request, 'planas.html', context)
 
 
-def KodasView(request, kodas_nr):
+def kodas_view(request, kodas_nr):
     context = {
         'kodas_nr': kodas_nr
     }
@@ -179,13 +180,62 @@ class PlanasDelete(
 # -----------------------------
 
 
-def SutartisView(request):
+def sutartis_view(request, kodas):
     # current_user = request.user.get_full_name()
     current_user = request.user.username
-    kodas = Planas.objects.filter(organizatorius=current_user)
+    # kodas = Planas.objects.filter(organizatorius=current_user)
     context = {
+        'planas_kodas': Planas.objects.get(kodas=kodas),
         'current_user': current_user,
         'kodas': Sutartis.objects.filter(
-         kodas_id__in=kodas).values()}
+         kodas=kodas).values()}
 
     return render(request, 'sutartis.html', context)
+
+'''
+# dar reikia taisyti
+class ZurnalasPagalKoda(generic.TemplateView):
+    template_name = 'home.html'
+
+    def __init__(self, request):
+        self.cu = request.user.username
+        return self.cu
+
+    def get_context_data(self, **kwargs):
+        context = super(ZurnalasPagalKoda, self).get_context_data(**kwargs)
+        context = self.cu
+        context['visas_vardas'] = ''
+        return context
+'''
+
+
+class SutartisUpdate(
+        views.LoginRequiredMixin,
+        views.FormValidMessageMixin,
+        generic.edit.UpdateView):
+
+    def get_object(self, queryset=None):
+        obj = Sutartis.objects.get(kodas=self.kwargs['kodas'])
+
+        return obj
+
+    form_class = SutartisUpdateForm
+    form_valid_message = 'Sutartis pataisyta!'
+    template_name = 'sutartis_form.html'
+    # k = get_object(queryset=None)
+
+    success_url = reverse_lazy('sutartis_view', kwargs={'kodas': ''})
+
+    def get_success_url(self):
+        if 'kodas' in self.kwargs:
+            slug = self.kwargs['kodas']
+        else:
+            slug = 'demo'
+        return reverse_lazy('sutartis_view', kwargs={'kodas': slug})
+
+
+'''
+    def form_valid(self, form):
+        form.instance.kodas = Planas.objects.get(kodas=self.kwargs['kodas'])
+        return super(SutartisUpdate, self).form_valid(form)
+'''

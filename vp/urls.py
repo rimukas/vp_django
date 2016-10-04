@@ -22,7 +22,7 @@ from vart import views
 #from vart.views import LoginView
 #from vart.views import LogOutView
 #from vart.views import PlanasView
-#from vart.views import KodasView
+#from vart.views import kodas_view
 #from vart.views import Planas
 
 
@@ -33,12 +33,13 @@ urlpatterns = [
     url(r'^accounts/register/$', views.SignUpView.as_view(), name='signup'),
     url(r'^accounts/login/$', views.LoginView.as_view(), name='login'),
     url(r'^accounts/logout/$', views.LogOutView.as_view(), name='logout'),
-    url(r'^planas/$', views.PlanasView, name='planas'),
+    url(r'^planas/$', views.planas_view, name='planas'),
     url(r'^planas/(?P<kodas>\d+)/$', views.PlanasUpdate.as_view(), name='planas_update'),
     url(r'^planas/delete/(?P<kodas>\d+)/$', views.planas_delete_confirm, name='planas_delete_confirm'),
     url(r'^planas/delete/del/(?P<kodas>\d+)/$', views.planas_delete, name='planas_delete'),
     # url(r'^planas/delete/del/(?P<kodas>\d+)/$', views.PlanasDelete.as_view(), name='planas_delete'),
     # url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
     url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
-    url(r'^mano_sutartis/$', views.SutartisView, name='sutartis_view'),
+    url(r'^mano_sutartis/(?P<kodas>[0-9-]+)/$', views.sutartis_view, name='sutartis_view'),
+    url(r'^mano_sutartis/edit/(?P<kodas>[0-9-]+)/$', views.SutartisUpdate.as_view(), name='sutartis_update'),
 ]

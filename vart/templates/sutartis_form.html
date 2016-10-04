@@ -1,0 +1,10 @@
+{% extends '_layouts/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Sutarties redagavimas | {{ block.super }}{% endblock %}
+
+{% block headline %}<h3><b>Įvesk kažką</b></h3>{% endblock %}
+
+{% block content %}
+    {% crispy form %} 
+    
+{% endblock %}
