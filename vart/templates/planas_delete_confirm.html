@@ -1,0 +1,12 @@
+{% extends '_layouts/base.html' %}
+{% block content%}
+<h3>
+<div class="well"><br>Dėmesio! Kodas <strong>{{ kodas.kodas}}: {{ kodas.preke}}</strong> bus  pašalintas iš tavo paskyros. Reikalui esant, jį galima atstatyti arba priskirti kitam sistemos vartotojui.<br> 
+Ar tu įsitikinęs, kad nori jį pašalinti?</p></h3>
+<form action="{% url 'planas_delete' kodas=kodas.kodas %}" method="post">{% csrf_token %}
+    <input type="button" class="btn btn-primary btn-lg" value="Nenoriu šalinti" onclick="window.history.back()" />
+    <input type="submit" class="btn btn-danger btn-sm" value="Taip, įsitikinęs" />
+
+</form>
+
+{% endblock content %}

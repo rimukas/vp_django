@@ -1,0 +1,55 @@
+{% extends '_layouts/base.html' %}
+
+{% block headline %}<h2><strong>Viešųjų pirkimų žurnalas</strong></h2>{% endblock headline %}
+
+{% block content %}
+    <p><h4><strong>{{ planas_kodas }}</strong></h4></p>
+<a class="btn btn-default" href="kodas_add">Pridėti naują sutartį</a>
+
+<table style="width:100%" class="table table-hover">
+<tr>
+    <th></th>
+    <th>Data</th>
+    <th>Numatoma suma, EUR</th>
+    <th>Tiekėjo kodas</th>
+    <th>Tiekėjas</th>
+    <th>Pastaba (nebūtina)</th>
+    <th>Ar tai žalias pirkimas?</th>
+  </tr>
+{% for k in kodas %}
+<tr>
+<td>
+    {{ k.id }}
+<a class="btn btn-primary" role="button" href={% url 'sutartis_update' id_pk=k.id %} data-toggle="tooltip" title="Redaguoti eilutę">
+        <span class="glyphicon glyphicon-edit"></span>
+    </a>
+
+<a class="btn btn-success" role="button" href={% url 'sutartis_copy' id_pk=k.id %} data-toggle="tooltip" title="Kopijuoti eilutę">
+        <span class="glyphicon glyphicon-copy"></span>
+    </a>
+
+<a class="btn btn-danger btn-xs" role="button" href="#" data-toggle="tooltip" title="Ištrinti eilutę">
+        <span class="glyphicon glyphicon-remove"></span>
+    </a>    
+
+</td>
+<td>{{ k.data|date:"Y-m-d"}}</td>
+<td>{{ k.suma}}</td>
+<td>{{ k.tiekejo_kodas}}</td>
+<td>{{ k.tiekejas}}</td>
+<td>{{ k.pastaba}}</td>
+<td>
+{% if k.zalias %}
+    <span class="glyphicon glyphicon-ok"></span>
+{% endif %}
+</tr>
+{% endfor %}
+
+</p>
+</table>
+
+
+{% for version in version_list %}
+    {{ version.user }} wrote version {{ version }}
+{% endfor %}
+{% endblock %}
