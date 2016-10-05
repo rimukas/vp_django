@@ -4,7 +4,24 @@
 
 {% block content %}
     <p><h4><strong>{{ planas_kodas }}</strong></h4></p>
-<a class="btn btn-default" href="kodas_add">Pridėti naują sutartį</a>
+
+    <ul class="nav nav-pills" role="tablist">
+    <li role="presentation" class="dropdown">
+        <a class="dropdown-toggle btn btn-default" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <span class="glyphicon glyphicon-list"></span> Pasirink kodą
+        <span class="caret"></span>
+    </a>
+        <ul class="dropdown-menu" aria-labelledby="dLabel">
+            {% for k in kodai %}
+                <li><a href={% url 'sutartis_view' kodas=k.kodas %}>{{ k }}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li role="presentation"><a class="btn btn-default" href="kodas_add">
+        <span class="glyphicon glyphicon-plus"></span>Pridėti naują sutartį
+    </a></li>
+    </ul>
+
 
 <table style="width:100%" class="table table-hover">
 <tr>
@@ -28,7 +45,7 @@
         <span class="glyphicon glyphicon-copy"></span>
     </a>
 
-<a class="btn btn-danger btn-xs" role="button" href="#" data-toggle="tooltip" title="Ištrinti eilutę">
+<a class="btn btn-danger btn-xs" role="button" href={% url 'sutartis_delete_confirm' id_pk=k.id %} data-toggle="tooltip" title="Ištrinti eilutę">
         <span class="glyphicon glyphicon-remove"></span>
     </a>    
 

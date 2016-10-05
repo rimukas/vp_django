@@ -154,7 +154,7 @@ def planas_delete(request, kodas):
     return render(request, 'planas.html', context)
 
 
-# uzkomentuotas tikras Planas eilutes pasalinimas is duombazes
+# uzkomentuotas Planas eilutes pasalinimas is duombazes
 '''
 def planas_delete_confirm(request, kodas):
     context = {"kodas": Planas.objects.get(kodas=kodas)}
@@ -188,6 +188,7 @@ def sutartis_view(request, kodas):
 
     context = {
         'planas_kodas': Planas.objects.get(kodas=kodas),
+        'kodai': Planas.objects.filter(organizatorius=current_user),
         'current_user': current_user,
         'kodas': Sutartis.objects.filter(
          kodas_id=kodas).values()}
@@ -253,7 +254,6 @@ class SutartisUpdate(
 
 def sutartis_copy(request, id_pk):
     nauja = Sutartis.objects.get(pk=id_pk)
-    kodas = nauja.kodas_id
     nauja.pk = None
     nauja.save()
     return redirect('sutartis_update', id_pk=nauja.pk)
@@ -265,3 +265,47 @@ def sutartis_copy(request, id_pk):
         form.instance.kodas = Planas.objects.get(kodas=self.kwargs['kodas'])
         return super(SutartisUpdate, self).form_valid(form)
 '''
+
+
+def sutartis_delete_confirm(request, id_pk):
+    context = {
+        'id_pk': Sutartis.objects.get(pk=id_pk).id,
+        'kodas': Sutartis.objects.get(pk=id_pk),
+        'debug': 'DEBUG'
+    }
+    # return render(request, 'kodas_view.html', context)
+    return render(request, 'sutartis_delete_confirm.html', context)
+
+
+class SutartisDelete(
+        views.LoginRequiredMixin,
+        views.FormValidMessageMixin,
+        generic.edit.DeleteView):
+    # form_class = PlanasDeleteForm
+    # form_valid_message = 'Planas pataisytas!'
+    template_name = 'sutartis_delete_confirm.html'
+    model = Sutartis
+    form_valid_message = 'Sutartis sėkmingai ištrinta.'
+
+    # success_url = reverse_lazy('planas')
+
+    def get_object(self, queryset=None):
+        obj = Sutartis.objects.get(pk=self.kwargs['id_pk'])
+        return obj
+
+    def get_success_url(self):
+        if 'id_pk' in self.kwargs:
+            id_pk = self.kwargs['id_pk']
+            kodas = Sutartis.objects.get(pk=id_pk).kodas_id
+        else:
+            kodas = '404'
+        return reverse_lazy('sutartis_view', kwargs={'kodas': kodas})
+
+
+def laikotarpis(request):
+    # pagal nutylejima rodoma nuo einamuju metu pradzios
+    nuo_kada = date(date.today().year, 1, 1)
+    # pagal nutylejima rodoma iki siandienos
+    iki_kada = date.today()
+
+    return render(request, 'zurnalo_laikotarpis.html')

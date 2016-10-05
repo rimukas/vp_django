@@ -1,0 +1,16 @@
+{% extends '_layouts/base.html' %}
+{% block content%}
+<h3>
+<div class="well"><br><h2><strong>Dėmesio!</strong></h2><br>
+    <strong>{{ kodas.data}}</strong> sutartis, kurios VP kodas: <strong>{{ kodas.kodas}}</strong>,
+    tiekėjas: <strong>{{ kodas.tiekejas}}</strong>, numatyta sutarties suma: <strong>{{ kodas.suma}}</strong>
+    bus <strong>negrįžtamai</strong> pašalinta.<br>
+    <br>Taip pat negrįžtamai bus pašalintos visos su šia sutartimi surištos sąskaitos faktūros!<br><br>
+    Ar tu tikrai nori ją pašalinti?</p></h3>
+<form action="{% url 'sutartis_delete' id_pk=id_pk %}" method="post">{% csrf_token %}
+    <input type="button" class="btn btn-primary btn-lg active" value="Nenoriu šalinti" onclick="window.history.back()" />
+     Taip, tikrai noriu pašalinti  <input type="submit" class="btn btn-danger btn-xs" value="x" />
+
+</form>
+
+{% endblock content %}
