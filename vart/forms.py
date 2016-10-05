@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, ButtonHolder, Submit, HTML, Button
+from crispy_forms.layout import Layout, ButtonHolder, Submit, HTML, Button, Field
 from django import forms
 from .models import Planas, Sutartis
 
