@@ -3,10 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse_lazy, reverse
 # from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from braces import views
 from .models import Planas, Sutartis
+from datetime import date
 # from django.contrib.auth.decorators import login_required
 # from django.utils.decorators import method_decorator
 # from django.views.generic.edit import CreateView
@@ -184,11 +185,12 @@ def sutartis_view(request, kodas):
     # current_user = request.user.get_full_name()
     current_user = request.user.username
     # kodas = Planas.objects.filter(organizatorius=current_user)
+
     context = {
         'planas_kodas': Planas.objects.get(kodas=kodas),
         'current_user': current_user,
         'kodas': Sutartis.objects.filter(
-         kodas=kodas).values()}
+         kodas_id=kodas).values()}
 
     return render(request, 'sutartis.html', context)
 
@@ -215,7 +217,7 @@ class SutartisUpdate(
         generic.edit.UpdateView):
 
     def get_object(self, queryset=None):
-        obj = Sutartis.objects.get(kodas=self.kwargs['kodas'])
+        obj = Sutartis.objects.get(pk=self.kwargs['id_pk'])
 
         return obj
 
@@ -224,14 +226,38 @@ class SutartisUpdate(
     template_name = 'sutartis_form.html'
     # k = get_object(queryset=None)
 
-    success_url = reverse_lazy('sutartis_view', kwargs={'kodas': ''})
+    # success_url = reverse_lazy('sutartis_view', kwargs={'kodas': ''})
+
+    # irasant forma suvienodina imones pavadinimo uzrasyma. Pvz., "IMONESPAVADINIMAS, UAB"
+    def form_valid(self, form):
+        tipas = ['IĮ', 'AB', 'UAB', 'TŪB', 'KŪB', 'VĮ', 'VAĮ']
+        appnd = ''
+        imone = form.cleaned_data['tiekejas']
+        imone_list = imone.replace('\'', '"').replace(',', '').upper().split(' ')
+        for li in imone_list:
+            if li in tipas:
+                appnd = ', ' + imone_list.pop(imone_list.index(li))
+
+        form.instance.tiekejas = ' '.join(imone_list) + appnd
+
+        return super(SutartisUpdate, self).form_valid(form)
 
     def get_success_url(self):
-        if 'kodas' in self.kwargs:
-            slug = self.kwargs['kodas']
+        if 'id_pk' in self.kwargs:
+            id_pk = self.kwargs['id_pk']
+            kodas = Sutartis.objects.get(pk=id_pk).kodas_id
         else:
-            slug = 'demo'
-        return reverse_lazy('sutartis_view', kwargs={'kodas': slug})
+            kodas = '404'
+        return reverse_lazy('sutartis_view', kwargs={'kodas': kodas})
+
+
+def sutartis_copy(request, id_pk):
+    nauja = Sutartis.objects.get(pk=id_pk)
+    kodas = nauja.kodas_id
+    nauja.pk = None
+    nauja.save()
+    return redirect('sutartis_update', id_pk=nauja.pk)
+    # return render(request, 'sutartis.html')
 
 
 '''

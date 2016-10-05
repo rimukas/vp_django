@@ -19,18 +19,19 @@
 {% for k in kodas %}
 <tr>
 <td>
-<a class="btn btn-primary" role="button" href={% url 'sutartis_update' kodas=k.kodas_id %} data-toggle="tooltip" title="Redaguoti eilutę">
+    {{ k.id }}
+<a class="btn btn-primary" role="button" href={% url 'sutartis_update' id_pk=k.id %} data-toggle="tooltip" title="Redaguoti eilutę">
         <span class="glyphicon glyphicon-edit"></span>
     </a>
 
-<a class="btn btn-success" role="button" href="#" data-toggle="tooltip" title="Kopijuoti eilutę">
+<a class="btn btn-success" role="button" href={% url 'sutartis_copy' id_pk=k.id %} data-toggle="tooltip" title="Kopijuoti eilutę">
         <span class="glyphicon glyphicon-copy"></span>
     </a>
 
 <a class="btn btn-danger btn-xs" role="button" href="#" data-toggle="tooltip" title="Ištrinti eilutę">
         <span class="glyphicon glyphicon-remove"></span>
     </a>    
-        
+
 </td>
 <td>{{ k.data|date:"Y-m-d"}}</td>
 <td>{{ k.suma}}</td>

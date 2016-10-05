@@ -41,5 +41,7 @@ urlpatterns = [
     # url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
     url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
     url(r'^mano_sutartis/(?P<kodas>[0-9-]+)/$', views.sutartis_view, name='sutartis_view'),
-    url(r'^mano_sutartis/edit/(?P<kodas>[0-9-]+)/$', views.SutartisUpdate.as_view(), name='sutartis_update'),
+    url(r'^mano_sutartis/update/(?P<id_pk>[0-9-]+)/$', views.SutartisUpdate.as_view(), name='sutartis_update'),
+    url(r'^mano_sutartis/copy/(?P<id_pk>[0-9-]+)/$', views.sutartis_copy, name='sutartis_copy'),
+    # url(r'^mano_sutartis/copy/(?P<kodas>[0-9]+)/$', views.SutartisUpdate.as_view(), name='sutartis_update'),
 ]
