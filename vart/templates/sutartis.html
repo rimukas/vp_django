@@ -3,6 +3,9 @@
 {% block headline %}<h2><strong>Viešųjų pirkimų žurnalas</strong></h2>{% endblock headline %}
 
 {% block content %}
+    <div><h4><span class="text-info">Rodomas laikotarpis: </span><span class="text-primary"><strong>{{ data_nuo }} ~ {{ data_iki }}</span></h4></div><br>
+    <div><h4><span class="text-info">VP kodas: </span><span class="text-primary"><strong>{{ kodas.first.kodas }}</span></h4></div><br>
+
     <p><h4><strong>{{ planas_kodas }}</strong></h4></p>
 
     <ul class="nav nav-pills" role="tablist">
@@ -66,7 +69,4 @@
 </table>
 
 
-{% for version in version_list %}
-    {{ version.user }} wrote version {{ version }}
-{% endfor %}
 {% endblock %}

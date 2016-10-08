@@ -1,13 +1,14 @@
-from .forms import PlanasAddForm, RegistrationForm, PlanasUpdateForm, LoginForm, SutartisUpdateForm, PlanasDeleteForm
+from django.http import HttpResponseRedirect
+from .forms import PlanasAddForm, RegistrationForm, PlanasUpdateForm, LoginForm, SutartisUpdateForm, LaikotarpisForm, PlanasDeleteForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse_lazy, reverse
 # from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from braces import views
 from .models import Planas, Sutartis
-from datetime import date
+from datetime import date, datetime
 # from django.contrib.auth.decorators import login_required
 # from django.utils.decorators import method_decorator
 # from django.views.generic.edit import CreateView
@@ -182,16 +183,35 @@ class PlanasDelete(
 
 
 def sutartis_view(request, kodas):
+    kodas_p = kodas
+    data_cookie = request.COOKIES.get('date_to')
+    if data_cookie is None:
+        data_iki = date(date.today())
+    else:
+        data_iki = datetime.strptime(data_cookie, '%Y-%m-%d')
+
+    data_cookie = request.COOKIES.get('date_from')
+    if data_cookie is None:
+        data_nuo = date(date.today().year, 1, 1)
+    else:
+        data_nuo = datetime.strptime(data_cookie, '%Y-%m-%d')
+
+
     # current_user = request.user.get_full_name()
-    current_user = request.user.username
+    # current_user = user
     # kodas = Planas.objects.filter(organizatorius=current_user)
+    # kodai = Planas.objects.filter(organizatorius=user).kodas
+    kodas = Sutartis.objects.filter(
+        data__range=[data_nuo, data_iki]).filter(
+         kodas_id=kodas)  # .values()
 
     context = {
-        'planas_kodas': Planas.objects.get(kodas=kodas),
-        'kodai': Planas.objects.filter(organizatorius=current_user),
-        'current_user': current_user,
-        'kodas': Sutartis.objects.filter(
-         kodas_id=kodas).values()}
+        # 'planas_kodas': Planas.objects.get(kodas=kodas),
+        # 'kodai': Planas.objects.filter(organizatorius=user),
+        # 'current_user': user,
+        'data_nuo': data_nuo.strftime('%Y-%m-%d'),
+        'data_iki': data_iki.strftime('%Y-%m-%d'),
+        'kodas': kodas}
 
     return render(request, 'sutartis.html', context)
 
@@ -303,9 +323,39 @@ class SutartisDelete(
 
 
 def laikotarpis(request):
+    ''' Nustato filtruojama laikotarpi.
+
+    Laikotarpis - tai tiesiog filtras sutarties duomenu rodymui ir ivedimui.
+
+    :param request:
+    :return:
+    '''
     # pagal nutylejima rodoma nuo einamuju metu pradzios
     nuo_kada = date(date.today().year, 1, 1)
     # pagal nutylejima rodoma iki siandienos
     iki_kada = date.today()
+    current_user = request.user.username
+    kodas = Planas.objects.filter(organizatorius=current_user)
 
-    return render(request, 'zurnalo_laikotarpis.html')
+    if request.method == 'POST':
+        forma = LaikotarpisForm(request.POST)
+        if forma.is_valid():
+            date_from = forma.cleaned_data['date_from']
+            date_to = forma.cleaned_data['date_to']
+            kodas = forma.cleaned_data['kodas']
+            response = redirect('sutartis_view', kodas=kodas)
+            response.set_cookie(key='date_from', value=date_from)
+            response.set_cookie(key='date_to', value=date_to)
+            return response
+
+    else:
+        forma = LaikotarpisForm()
+    return render(request, 'zurnalo_laikotarpis.html', {
+        'form': forma,
+        'kodas': kodas,
+        'nuo_kada': nuo_kada,
+        'iki_kada': iki_kada
+    })
+
+
+
