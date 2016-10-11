@@ -1,15 +1,20 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE>
-<html>
+<html lang="lt">
 <head>
     <title>{% block title %}Viešieji pirkimai{% endblock title %}</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    
+    <link rel="stylesheet" type="text/css" href="{% static "/vart/css/ws-calendar.default.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-html5-1.2.2/b-print-1.2.2/fh-3.1.2/r-2.1.0/datatables.min.css"/>
+
+
     <style>
         body {
             padding-bottom: 20px;
             padding-top: 70px;
         }
+
         .messages {
             list-style: none;
         }
@@ -19,67 +24,99 @@
 <body>
 
 <!-- jQuery CDN -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <!-- jQuery local fallback -->
-  <script>window.jQuery || document.write('<script src="{% static "/vart/jquery.min.js" %}"><\/script>')</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<!-- jQuery local fallback -->
+<script>window.jQuery || document.write('<script src="{% static "/vart/jquery.min.js" %}"><\/script>')</script>
 <!-- jQuery UI CDN -->
-    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
         integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-			  crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
 <!-- jQuery UI CSS CDN -->
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" type="text/css" media="all" />
-  <!-- jQuery local fallback -->
-    <script>window.jQuery || document.write('<script src="{% static "/vart/jquery-ui.min.js" %}"><\/script>')</script>
-
+<link rel="stylesheet" href="2" type="text/css" media="all"/>
+<!-- jQuery local fallback -->
+<script>window.jQuery || document.write('<script src="{% static "/vart/jquery-ui.min.js" %}"><\/script>')</script>
+<!-- WS Calendar -->
+<script type="text/javascript" src="{% static "/vart/js/ws-calendar-min.js" %}"></script>
 <!-- Bootstrap JS CDN -->
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <!-- Bootstrap JS local fallback -->
-  <script>if(typeof($.fn.modal) === 'undefined') {document.write('<script src="{% static "/vart/bootstrap.min.js" %}"><\/script>')}</script>
-  <!-- Bootstrap CSS local fallback -->
-  <script>
-    $(document).ready(function() {
-    var bodyColor = $('body').css('color');
-    if(bodyColor != 'rgb(51, 51, 51)') {
-    $("head").prepend('<link rel="stylesheet" href="{% static "/vart/css/bootstrap.min.css" %}">');}});
-  </script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Bootstrap JS local fallback -->
+<script>if (typeof($.fn.modal) === 'undefined') {
+    document.write('<script src="{% static "/vart/bootstrap.min.js" %}"><\/script>')
+}</script>
+<!-- Bootstrap CSS local fallback -->
+<script>
+    $(document).ready(function () {
+        var bodyColor = $('body').css('color');
+        if (bodyColor != 'rgb(51, 51, 51)') {
+            $("head").prepend('<link rel="stylesheet" href="{% static "/vart/css/bootstrap.min.css" %}">');
+        }
+    });
+</script>
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
+<!-- DataTables -->
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-html5-1.2.2/b-print-1.2.2/fh-3.1.2/r-2.1.0/datatables.min.js"></script>
+
+<!-- Navbar -->
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">Viešieji pirkimai</a>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Viešieji pirkimai</a>
         </div>
-        <div class="navbar-collapse collapse">
-        {% if not user.is_authenticated %}
-<a href="{% url 'signup' %}" class="btn btn-default navbar-btn">Register</a>
-<a href="{% url 'login' %}" class="btn btn-default navbar-btn">Login</a>
-{% else %}
-<a href="{% url 'logout' %}" class="btn btn-default navbar-btn">Logout</a>
-{% endif %}
-        </div><!--/.navbar-collapse -->         
-      </div>      
-    </div>
-    <div align="right">{% if user.is_authenticated %} <b> {{ user.get_full_name|default:user.username}} {% endif %}</b> </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            {% if user.is_authenticated %}
 
-    {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+                <ul class="nav navbar-nav">
+
+                    <li id="m1"><a href="{% url 'planas' %}">Planas</a></li>
+                    <li id="m2"><a href="{% url 'laikotarpis' %}">Žurnalo pildymas</a></li>
+
+                </ul>
+            {% endif %}
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if not user.is_authenticated %}
+                    <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a>
+                    </li>
+                {% else %}
+                    <li><a href="#">{{ user.get_full_name|default:user.username }}</a></li>
+                    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Atsijungti</a>
+                    </li>
+
+                {% endif %}
+
+            </ul>
+        </div> <!--/.navbar-collapse -->
+    </div>
+</nav>
+
+<!-- end Navbar -->
+
+<!-- apatine pranesimu juosta -->
+{% if messages %}
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endif %}
-    <div class="page-header">
-        <div class="container">{% block headline %}{% endblock headline %}</div>
-    </div>
-    <div class="container">
-        {% block content %}{% endblock content %}
-    </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    {% block js %}{% endblock js %}
+<!-- // -->
+
+
+    <div class="container-fluid">{% block headline %}{% endblock headline %}</div>
+
+<div class="container-fluid">
+    {% block content %}{% endblock content %}
+</div>
+{% block js %}{% endblock js %}
 </body>
+
 </html>
+

@@ -69,7 +69,6 @@ class PlanasAddForm(forms.ModelForm):
 
 #  prekes/paslaugos/darbo redagavimas
 class PlanasUpdateForm(forms.ModelForm):
-
     class Meta:
         model = Planas
         fields = ['kodas', 'preke', 'islaidos', 'paslauga_darbas_preke']
@@ -95,6 +94,11 @@ class PlanasUpdateForm(forms.ModelForm):
 
             # HTML('<br><a class="btn btn-warning" href={% url "planas" %}>Grįžti neįrašius</a>'),
             )
+
+    def clean(self):
+        f = self.fields['data']
+        print(f)
+        return
 
 
 #  prekes/paslaugos/darbo istrynimas
@@ -156,3 +160,9 @@ class SutartisUpdateForm(forms.ModelForm):
 
             # HTML('<br><a class="btn btn-warning" href={% url "planas" %}>Grįžti neįrašius</a>'),
             )
+
+
+class LaikotarpisForm(forms.Form):
+    date_from = forms.DateField()  # max_length=10
+    date_to = forms.DateField()
+    kodas = forms.CharField(max_length=30)

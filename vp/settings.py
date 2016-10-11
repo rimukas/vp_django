@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'crispy_forms',
     'vart',
+    'django_extensions',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
