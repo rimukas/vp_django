@@ -9,8 +9,8 @@
     <div class="panel-heading">Pasirink rodomą laikotarpį</div>
     <div class="panel-body">
     <div class="ws-datepicker">
-            <input id="datefrom" name="dateFrom" type="text" value="2015-01-01">
-         ~ <input id="dateto" name="dateTo" type="text" value="2015-01-30">
+            <input id="datefrom" name="dateFrom" type="text" value="{{ nuo_kada|date:'Y-m-d' }}">
+         ~ <input id="dateto" name="dateTo" type="text" value="{{ iki_kada|date:'Y-m-d' }}">
     </div><br><br>
 
 
@@ -54,6 +54,8 @@
 
     <script>
         $(document).ready(function() {
+            var element = document.getElementById("m2");
+            element.classList.add("active");
             $(function() {
                 $(".ws-datepicker").wsCalendar({"image-base-url" : "{% static '/vart/images/' %}"});
                 });
@@ -71,6 +73,11 @@
                 $("input#id_kodas").val($("a#" + id + ".kodas_click > span.hidden.tik-kodas").html());
                 })
         })
+
+
+
+
+
 
     </script>
 

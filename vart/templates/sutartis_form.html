@@ -2,20 +2,49 @@
 {% load crispy_forms_tags %}
 {% block title %}Sutarties redagavimas | {{ block.super }}{% endblock %}
 
-{% block headline %}<h3><b>Įvesk kažką</b></h3>{% endblock %}
+{% block headline %}<h3><b>Įvesk kažką 1</b></h3>{% endblock %}
 
 {% block content %}
+    <div><h4><span class="text-info">VP kodas: </span><span class="text-primary"><strong>{{ kodas }}</strong></span></h4></div><br>
     {% crispy form %}
 
-{% endblock %}
+    {% comment %}
+        Sekantis JQuery pataiso i forma ivesta data.
+        T.y. data galima ivesti formatais: 20161231, 2016-12-31; 2016.12.31, 2016,12,31, 2016/12/31
+    {% endcomment %}
+
+    <script>
+        $(document).ready(function () {
+            $("#id_data").change(function () {
+                var data = $("#id_data").val();
+                if (data.length == 8) {
+                    data = data.slice(0,4) + "-" + data.slice(4,6) + "-" + data.slice(6,8);
+                }
+                else {
+                    data = data.split(/[.,\/ -]/);
+                    data = data[0] + "-" + data[1] + "-" + data[2];
+                }
+                $("#id_data").val(data);
+            });
+        });
+
+{% comment %}
+ Funkcija autopaieskai formos lauke "tiekejas"
+{% endcomment %}
 
 $( function() {
     var availableSutartis = [
-      {% for sut in all_sutartis %}
-          "{{sut}}",
+      {% for sut in visi_tiekejai %}
+          '{{ sut|safe }}',
       {%endfor%}
     ];
+    // alert(availableSutartis);
     $( "#id_tiekejas" ).autocomplete({
       source: availableSutartis
     });
   } );
+</script>
+
+{% endblock %}
+
+

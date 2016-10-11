@@ -9,6 +9,7 @@ from django.views import generic
 from braces import views
 from .models import Planas, Sutartis
 from datetime import date, datetime
+import re
 # from django.contrib.auth.decorators import login_required
 # from django.utils.decorators import method_decorator
 # from django.views.generic.edit import CreateView
@@ -201,7 +202,9 @@ def sutartis_view(request, kodas):
     # current_user = user
     # kodas = Planas.objects.filter(organizatorius=current_user)
     # kodai = Planas.objects.filter(organizatorius=user).kodas
-    kodas = Sutartis.objects.filter(
+    kodas = get_object_or_404(Planas, kodas=kodas)
+
+    kodas_filtered = Sutartis.objects.filter(
         data__range=[data_nuo, data_iki]).filter(
          kodas_id=kodas)  # .values()
 
@@ -211,25 +214,11 @@ def sutartis_view(request, kodas):
         # 'current_user': user,
         'data_nuo': data_nuo.strftime('%Y-%m-%d'),
         'data_iki': data_iki.strftime('%Y-%m-%d'),
-        'kodas': kodas}
+        'kodas': kodas,
+        'kodas_filtered': kodas_filtered
+    }
 
     return render(request, 'sutartis.html', context)
-
-'''
-# dar reikia taisyti
-class ZurnalasPagalKoda(generic.TemplateView):
-    template_name = 'home.html'
-
-    def __init__(self, request):
-        self.cu = request.user.username
-        return self.cu
-
-    def get_context_data(self, **kwargs):
-        context = super(ZurnalasPagalKoda, self).get_context_data(**kwargs)
-        context = self.cu
-        context['visas_vardas'] = ''
-        return context
-'''
 
 
 class SutartisUpdate(
@@ -239,7 +228,6 @@ class SutartisUpdate(
 
     def get_object(self, queryset=None):
         obj = Sutartis.objects.get(pk=self.kwargs['id_pk'])
-
         return obj
 
     form_class = SutartisUpdateForm
@@ -249,8 +237,12 @@ class SutartisUpdate(
 
     # success_url = reverse_lazy('sutartis_view', kwargs={'kodas': ''})
 
-    # irasant forma suvienodina imones pavadinimo uzrasyma. Pvz., "IMONESPAVADINIMAS, UAB"
     def form_valid(self, form):
+        ''' Irasant forma suvienodina imones pavadinimo uzrasyma. Pvz., "IMONESPAVADINIMAS, UAB"
+
+        :param form:
+        :return:
+        '''
         tipas = ['IĮ', 'AB', 'UAB', 'TŪB', 'KŪB', 'VĮ', 'VAĮ']
         appnd = ''
         imone = form.cleaned_data['tiekejas']
@@ -330,10 +322,18 @@ def laikotarpis(request):
     :param request:
     :return:
     '''
-    # pagal nutylejima rodoma nuo einamuju metu pradzios
-    nuo_kada = date(date.today().year, 1, 1)
-    # pagal nutylejima rodoma iki siandienos
-    iki_kada = date.today()
+    data_cookie = request.COOKIES.get('date_to')
+    if data_cookie is None:
+        data_iki = date(date.today())
+    else:
+        data_iki = datetime.strptime(data_cookie, '%Y-%m-%d')
+
+    data_cookie = request.COOKIES.get('date_from')
+    if data_cookie is None:
+        data_nuo = date(date.today().year, 1, 1)
+    else:
+        data_nuo = datetime.strptime(data_cookie, '%Y-%m-%d')
+
     current_user = request.user.username
     kodas = Planas.objects.filter(organizatorius=current_user)
 
@@ -353,9 +353,58 @@ def laikotarpis(request):
     return render(request, 'zurnalo_laikotarpis.html', {
         'form': forma,
         'kodas': kodas,
-        'nuo_kada': nuo_kada,
-        'iki_kada': iki_kada
+        'nuo_kada': data_nuo,
+        'iki_kada': data_iki
     })
 
+
+class SutartisAdd(
+        views.LoginRequiredMixin,
+        views.FormValidMessageMixin,
+        generic.edit.CreateView):
+
+    form_class = SutartisUpdateForm
+    form_valid_message = 'Pridėta nauja sutartis.'
+    template_name = 'sutartis_form.html'
+
+    # k = get_object(queryset=None)
+
+    # success_url = reverse_lazy('sutartis_view', kwargs={'kodas': ''})
+
+    def form_valid(self, form):
+        ''' Irasant forma suvienodina imones pavadinimo uzrasyma. Pvz., "IMONESPAVADINIMAS, UAB"
+
+        :param form:
+        :return:
+        '''
+        tipas = ['IĮ', 'AB', 'UAB', 'TŪB', 'KŪB', 'VĮ', 'VAĮ']
+        appnd = ''
+        imone = form.cleaned_data['tiekejas']
+        imone_list = imone.replace('\'', '"').replace(',', '').upper().split(' ')
+        for li in imone_list:
+            if li in tipas:
+                appnd = ', ' + imone_list.pop(imone_list.index(li))
+
+        # data = form.cleaned_data['data']
+        # form.instance.data = data
+        form.instance.tiekejas = ' '.join(imone_list) + appnd
+        # I forma automatiskai irasom VP koda. Ji gaunam kaip objekta, nes tai ManyToOne ForeignKey laukas
+        form.instance.kodas = Planas.objects.get(kodas=self.kwargs['kodas'])
+        return super(SutartisAdd, self).form_valid(form)
+
+    def get_success_url(self):
+        if 'kodas' in self.kwargs:
+            kodas = self.kwargs['kodas']
+        else:
+            kodas = '404'
+        return reverse_lazy('sutartis_view', kwargs={'kodas': kodas})
+
+    def get_context_data(self, **kwargs):
+        context = super(SutartisAdd, self).get_context_data(**kwargs)
+        context_view = context['view']
+        context_kwargs = context_view.kwargs['kodas']
+        context['kodas'] = Planas.objects.get(kodas=context_kwargs)
+        context['visi_tiekejai'] = Sutartis.objects.all().values_list('tiekejas', flat=True).distinct()
+        return context
 
 

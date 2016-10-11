@@ -3,26 +3,5 @@
 {% block headline %}<h1>Viešųjų pirkimų žurnalas</h1>{% endblock headline %}
 
 {% block content %}
-    <p>{{ user }}</p>
-<p></b> 
-<ul class="nav nav-pills" role="tablist">
-<li role="presentation"><a class="btn btn-default" href="planas">Mano planas</a></li>
-<li role="presentation"><a class="btn btn-default" href="laikotarpis/">Žurnalo pildymas</a></li>
-    <li role="presentation" class="dropdown open">
-        <a class="dropdown-toggle btn btn-default" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            --
-        <span class="caret"></span>
-    </a>
-        <ul class="dropdown-menu" aria-labelledby="dLabel">
-            {% for kodas in kodai %}
-                <li><a href={% url 'sutartis_view' kodas=kodas.kodas %}>{{ kodas }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    </ul>
-</div>
 
-{% for version in version_list %}
-    {{ version.user }} wrote version {{ version }}
-{% endfor %}
 {% endblock %}

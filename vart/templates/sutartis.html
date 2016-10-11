@@ -1,72 +1,90 @@
 {% extends '_layouts/base.html' %}
+{% load static %}
 
-{% block headline %}<h2><strong>Viešųjų pirkimų žurnalas</strong></h2>{% endblock headline %}
+{% block headline %}{% endblock headline %}
 
 {% block content %}
-    <div><h4><span class="text-info">Rodomas laikotarpis: </span><span class="text-primary"><strong>{{ data_nuo }} ~ {{ data_iki }}</span></h4></div><br>
-    <div><h4><span class="text-info">VP kodas: </span><span class="text-primary"><strong>{{ kodas.first.kodas }}</span></h4></div><br>
-
-    <p><h4><strong>{{ planas_kodas }}</strong></h4></p>
+    <div><h4><span class="text-info">Rodomas laikotarpis: </span><span
+            class="text-primary"><strong>{{ data_nuo }} ~ {{ data_iki }}</span></h4></div>
+    <div><h4><span class="text-info">VP kodas: </span><span class="text-primary"><strong>{{ kodas }}</strong></span>
+    </h4></div>
 
     <ul class="nav nav-pills" role="tablist">
-    <li role="presentation" class="dropdown">
-        <a class="dropdown-toggle btn btn-default" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <span class="glyphicon glyphicon-list"></span> Pasirink kodą
-        <span class="caret"></span>
-    </a>
-        <ul class="dropdown-menu" aria-labelledby="dLabel">
-            {% for k in kodai %}
-                <li><a href={% url 'sutartis_view' kodas=k.kodas %}>{{ k }}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li role="presentation"><a class="btn btn-default" href="kodas_add">
-        <span class="glyphicon glyphicon-plus"></span>Pridėti naują sutartį
-    </a></li>
+        <li role="presentation"><a class="btn btn-default" href="{% url 'sutartis_add' kodas=kodas.kodas %}">
+            <span class="glyphicon glyphicon-plus"></span>Pridėti naują sutartį
+        </a></li>
     </ul>
+    <hr>
 
 
-<table style="width:100%" class="table table-hover">
-<tr>
-    <th></th>
-    <th>Data</th>
-    <th>Numatoma suma, EUR</th>
-    <th>Tiekėjo kodas</th>
-    <th>Tiekėjas</th>
-    <th>Pastaba (nebūtina)</th>
-    <th>Ar tai žalias pirkimas?</th>
-  </tr>
-{% for k in kodas %}
-<tr>
-<td>
-    {{ k.id }}
-<a class="btn btn-primary" role="button" href={% url 'sutartis_update' id_pk=k.id %} data-toggle="tooltip" title="Redaguoti eilutę">
-        <span class="glyphicon glyphicon-edit"></span>
-    </a>
+    <table id="table_sutartis" style="width:100%" class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Data</th>
+            <th>Numatoma suma, EUR</th>
+            <th>Tiekėjo kodas</th>
+            <th>Tiekėjas</th>
+            <th>Pastaba (nebūtina)</th>
+            <th>Ar tai žalias pirkimas?</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for k in kodas_filtered %}
+            <tr>
+                <td>
+                    {{ k.id }}
+                    <a class="btn btn-primary" role="button"
+                       href={% url 'sutartis_update' id_pk=k.id %} data-toggle="tooltip" title="Redaguoti eilutę">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
 
-<a class="btn btn-success" role="button" href={% url 'sutartis_copy' id_pk=k.id %} data-toggle="tooltip" title="Kopijuoti eilutę">
-        <span class="glyphicon glyphicon-copy"></span>
-    </a>
+                    <a class="btn btn-success" role="button"
+                       href={% url 'sutartis_copy' id_pk=k.id %} data-toggle="tooltip" title="Kopijuoti eilutę">
+                        <span class="glyphicon glyphicon-copy"></span>
+                    </a>
 
-<a class="btn btn-danger btn-xs" role="button" href={% url 'sutartis_delete_confirm' id_pk=k.id %} data-toggle="tooltip" title="Ištrinti eilutę">
-        <span class="glyphicon glyphicon-remove"></span>
-    </a>    
+                    <a class="btn btn-danger btn-xs" role="button"
+                       href={% url 'sutartis_delete_confirm' id_pk=k.id %} data-toggle="tooltip"
+                       title="Ištrinti eilutę">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
 
-</td>
-<td>{{ k.data|date:"Y-m-d"}}</td>
-<td>{{ k.suma}}</td>
-<td>{{ k.tiekejo_kodas}}</td>
-<td>{{ k.tiekejas}}</td>
-<td>{{ k.pastaba}}</td>
-<td>
-{% if k.zalias %}
-    <span class="glyphicon glyphicon-ok"></span>
-{% endif %}
-</tr>
-{% endfor %}
+                </td>
+                <td>{{ k.data|date:"Y-m-d" }}</td>
+                <td>{{ k.suma }}</td>
+                <td>{{ k.tiekejo_kodas }}</td>
+                <td>{{ k.tiekejas }}</td>
+                <td>{{ k.pastaba }}</td>
+                <td>
+                    {% if k.zalias %}
+                        <span class="glyphicon glyphicon-ok"></span>
+                    {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+        </p>
+    </table>
 
-</p>
-</table>
+    <script>
+        $(document).ready(function () {
+            $("#table_sutartis").DataTable({
+                        "columnDefs": [
+                            {
+                                "orderable": false,
+                                "searchable": false,
+                                "targets":  0
+                            }
 
+                        ],
+                        language: {
+                            url: "{% static "/vart/i18n/Lithuanian.json" %}"
+                        }
+                    }
+            );
+            //     var element = document.getElementById("m2");
+            //     element.classList.add("active");
+        })
+    </script>
 
 {% endblock %}

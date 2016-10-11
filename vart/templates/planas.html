@@ -1,17 +1,21 @@
 {% extends '_layouts/base.html' %}
+{% load static %}
 
 {% block headline %}<h2><strong>Viešųjų pirkimų planas</strong></h2>{% endblock headline %}
 
 {% block content %}
 <a class="btn btn-default" href="kodas_add">Pridėti naują prekę/paslaugą/darbą</a>
 
-<table style="width:100%" class="table table-hover">
+<table id="table_planas" style="width:100%" class="table table-hover table-bordered">
+<thead>
 <tr>
 	<th></th>
     <th>Kodas</th>
     <th>Prekės, paslaugos pavadinimas</th>
     <th>Numatomos išlaidos, EUR</th>
   </tr>
+    </thead>
+<tbody>
 {% for k in kodas %}
 <tr>
 <td>
@@ -30,6 +34,7 @@
 <td>{{ k.islaidos}}</td>
 </tr>
 {% endfor %}
+</tbody>
 
 </p>
 </table>
@@ -38,4 +43,21 @@
 {% for version in version_list %}
     {{ version.user }} wrote version {{ version }}
 {% endfor %}
+
+    <script>
+    $(document).ready(function() {
+        var element = document.getElementById("m1");
+        element.classList.add("active");
+        $("#table_planas").DataTable({
+            language: {
+                url: "{% static "/vart/i18n/Lithuanian.json" %}"
+             }
+                }
+
+        );
+
+
+    });
+    </script>
+
 {% endblock %}
