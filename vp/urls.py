@@ -29,11 +29,12 @@ from vart import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('^$', views.HomePageView.as_view(), name='home'),
-    url('^home/', views.HomePageView.as_view(), name='home'),
+    # url('^home/', views.HomePageView.as_view(), name='home'),
     url(r'^accounts/register/$', views.SignUpView.as_view(), name='signup'),
     url(r'^accounts/login/$', views.LoginView.as_view(), name='login'),
     url(r'^accounts/logout/$', views.LogOutView.as_view(), name='logout'),
-    url(r'^planas/$', views.planas_view, name='planas'),
+    # url(r'^planas/$', views.planas_view, name='planas'), PlanasView
+    url(r'^planas/$', views.PlanasView.as_view(), name='planas'),
     url(r'^planas/(?P<kodas>\d+)/$', views.PlanasUpdate.as_view(), name='planas_update'),
     url(r'^planas/delete/(?P<kodas>\d+)/$', views.planas_delete_confirm, name='planas_delete_confirm'),
     url(r'^planas/delete/del/(?P<kodas>\d+)/$', views.planas_delete, name='planas_delete'),
