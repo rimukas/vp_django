@@ -4,16 +4,16 @@
 {% block headline %}{% endblock headline %}
 
 {% block content %}
-    <div><h4><span class="text-info">Rodomas laikotarpis: </span><span
-            class="text-primary"><strong>{{ data_nuo }} ~ {{ data_iki }}</span></h4></div>
-    <div><h4><span class="text-info">VP kodas: </span><span class="text-primary"><strong>{{ kodas }}</strong></span>
-    </h4></div>
+     <div><h4><span class="text-info">VP kodas: </span><span
+            class="text-primary"><strong>{{ sutartis.kodas }}</strong></span></h4></div>
+    <div><h4><span class="text-info">Tiekėjas: </span><span
+            class="text-primary"><strong>{{ sutartis.tiekejas }}</strong></span></h4></div>
+    <div><h4><span class="text-info">Sutarties data: </span><span
+            class="text-primary"><strong>{{ sutartis.data }}</strong></span></h4></div>
+    <div><h4><span class="text-info">Sutarties suma: </span><span
+            class="text-primary"><strong>{{ sutartis.suma }}</strong></span></h4></div>
 
-    <ul class="nav nav-pills" role="tablist">
-        <li role="presentation"><a class="btn btn-default" href="{% url 'sutartis_add' kodas=kodas.kodas %}">
-            <span class="glyphicon glyphicon-plus"></span>Pridėti naują sutartį
-        </a></li>
-    </ul>
+
     <hr>
 
 
@@ -21,17 +21,14 @@
         <thead>
         <tr>
             <th></th>
+            <th>Sąskaitos faktūros Nr.</th>
             <th>Data</th>
-            <th>Numatoma suma, EUR</th>
-            <th>Tiekėjo kodas</th>
-            <th>Tiekėjas</th>
-            <th>Pastaba (nebūtina)</th>
-            <th>Ar tai žalias pirkimas?</th>
-            <th>Sąskaitos faktūros</th>
+            <th>Sąsk. f. suma, EUR</th>
+            <th>Pirkimo objekto pavadinimas</th>
         </tr>
         </thead>
         <tbody>
-        {% for k in kodas_filtered %}
+        {% for k in fakturos %}
             <tr>
                 <td style="white-space:nowrap;">
                     {{ k.id }}
@@ -52,35 +49,17 @@
                     </a>
 
                 </td>
+                <td>{{ k.sf }}</td>
                 <td>{{ k.data|date:"Y-m-d" }}</td>
                 <td>{{ k.suma }}</td>
-                <td>{{ k.tiekejo_kodas }}</td>
-                <td>{{ k.tiekejas }}</td>
-                <td>{{ k.pastaba }}</td>
-                <td>
-                    {% if k.zalias %}
-                        <span class="glyphicon glyphicon-leaf" style="color:green"></span>
-                    {% endif %}</td>
-                <td>
-                    <a class="btn btn-warning" role="button"
-                       href={% url 'sf_add' id_pk=k.id %} data-toggle="tooltip" title="Pridėti sąskaitą faktūrą">
-                        <span class="glyphicon glyphicon-euro"></span>
-                    </a>
-                {% for f in fakturos %}
-                    {% if f.sutartisid_id == k.id %}
-                    <a class="btn btn-primary" role="button"
-                       href={% url 'faktura' id_pk=k.id %} data-toggle="tooltip" title="Peržiūrėti sąskaitas faktūras">
-                        <span class="glyphicon glyphicon-option-horizontal"></span>
-                    </a>
-                    {% endif %}
-                    {% endfor %}
-                </td>
-
+                <td>{{ k.pavadinimas }}</td>
             </tr>
         {% endfor %}
         </tbody>
         </p>
     </table>
+<a class="btn btn-primary" href="{% url 'sutartis_view' kodas=sutartis.kodas.kodas %}"><span class="glyphicon glyphicon-chevron-left"></span>Grįžti į sutartis</a>
+
 
     <script>
         $(document).ready(function () {

@@ -6,13 +6,13 @@
 
 {% block content %}
     <div><h4><span class="text-info">VP kodas: </span><span
-            class="text-primary"><strong>{{ sutartis.kodas }}</strong></span></h4></div>
+            class="text-primary"><strong>{{ context.kodas }}</strong></span></h4></div>
     <div><h4><span class="text-info">Tiekėjas: </span><span
-            class="text-primary"><strong>{{ sutartis.tiekejas }}</strong></span></h4></div>
+            class="text-primary"><strong>{{ context.tiekejas }}</strong></span></h4></div>
     <div><h4><span class="text-info">Sutarties data: </span><span
-            class="text-primary"><strong>{{ sutartis.data }}</strong></span></h4></div>
+            class="text-primary"><strong>{{ context.data }}</strong></span></h4></div>
     <div><h4><span class="text-info">Sutarties suma: </span><span
-            class="text-primary"><strong>{{ sutartis.suma }}</strong></span></h4></div>
+            class="text-primary"><strong>{{ context.suma }}</strong></span></h4></div>
     {% crispy form %}
 
     {% comment %}
@@ -35,21 +35,6 @@
             });
         });
 
-        {% comment %}
-         Funkcija autopaieskai formos lauke "tiekejas"
-        {% endcomment %}
-
-        $(function () {
-            var availableSutartis = [
-                {% for sut in visi_tiekejai %}
-                    '{{ sut|safe }}',
-                {%endfor%}
-            ];
-            // alert(availableSutartis);
-            $("#id_tiekejas").autocomplete({
-                source: availableSutartis
-            });
-        });
     </script>
 
 {% endblock %}

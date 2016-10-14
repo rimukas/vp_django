@@ -269,13 +269,11 @@ def sutartis_view(request, kodas):
          kodas_id=kodas)
 
     context = {
-        # 'planas_kodas': Planas.objects.get(kodas=kodas),
-        # 'kodai': Planas.objects.filter(organizatorius=user),
-        # 'current_user': user,
         'data_nuo': data_nuo.strftime('%Y-%m-%d'),
         'data_iki': data_iki.strftime('%Y-%m-%d'),
         'kodas': kodas,
-        'kodas_filtered': kodas_filtered
+        'kodas_filtered': kodas_filtered,
+        'fakturos': Sf.objects.all()
     }
 
     return render(request, 'sutartis.html', context)
@@ -491,10 +489,15 @@ class SfAdd(
         views.LoginRequiredMixin,
         views.FormValidMessageMixin,
         generic.edit.CreateView):
+    """ Naujos saskaitos fakturos pridejimas prie esancios sutarties.
 
+    """
+
+    # perraso atributa is FormMixin
     form_class = SfForm
-
+    # perraso atributa is FormValidMessageMixin
     form_valid_message = 'Pridėta nauja sąskaita faktūra.'
+    # perraso atributa is TemplateResponseMixin
     template_name = 'sf_form.html'
 
     def get(self, request, *args, **kwargs):
@@ -521,10 +524,12 @@ class SfAdd(
         }
         return super(SfAdd, self).get(request, *args, **kwargs)
 
+    # perraso metoda is SingleObjectMixin
     def get_object(self, queryset=None):
         obj = Sutartis.objects.get(pk=self.kwargs['id_pk'])
         return obj
 
+    # perraso metoda is ModelFormMixin
     def get_success_url(self):
         if 'id_pk' in self.kwargs:
             id_pk = self.kwargs['id_pk']
@@ -537,10 +542,29 @@ class SfAdd(
     def get_context_data(self, **kwargs):
         context = super(SfAdd, self).get_context_data(**kwargs)
         id_pk = self.kwargs['id_pk']
-        context['sutartis'] = get_object_or_404(Sutartis, pk=id_pk)
+        context['context'] = get_object_or_404(Sutartis, pk=id_pk)
 
         # context_view = context['view']
         # context_kwargs = context_view.kwargs['kodas']
         # context['kodas'] = Planas.objects.get(kodas=context_kwargs)
         # context['visi_tiekejai'] = Sutartis.objects.all().values_list('tiekejas', flat=True).distinct()
+        return context
+
+
+class FakturaView(
+        views.LoginRequiredMixin,
+        generic.TemplateView):
+    """ Rodo faktura pagal konkrecia sutarti (faktura.html)
+
+    """
+
+    template_name = 'faktura.html'
+
+    # get_context_data() is ContextMixin grazina per URL perduotus parametrus
+    def get_context_data(self, **kwargs):
+        context = super(FakturaView, self).get_context_data(**kwargs)
+        id_pk = self.kwargs['id_pk']
+        obj = get_object_or_404(Sutartis, pk=id_pk)
+        context['fakturos'] = Sf.objects.filter(sutartisid=obj)
+        context['sutartis'] = obj
         return context
