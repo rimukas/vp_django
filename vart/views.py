@@ -1,5 +1,12 @@
 from django.http import HttpResponseRedirect
-from .forms import PlanasAddForm, RegistrationForm, PlanasUpdateForm, LoginForm, SutartisUpdateForm, LaikotarpisForm, PlanasDeleteForm
+from .forms import PlanasAddForm,\
+    RegistrationForm,\
+    PlanasUpdateForm,\
+    LoginForm,\
+    SutartisUpdateForm,\
+    LaikotarpisForm,\
+    SfForm,\
+    PlanasDeleteForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse_lazy, reverse
 # from django.contrib.auth.forms import UserCreationForm
@@ -7,7 +14,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from braces import views
-from .models import Planas, Sutartis
+from .models import Planas, Sutartis, Sf
 from datetime import date, datetime, timedelta
 import re
 from django.contrib.auth.decorators import login_required
@@ -480,3 +487,60 @@ class SutartisAdd(
         return context
 
 
+class SfAdd(
+        views.LoginRequiredMixin,
+        views.FormValidMessageMixin,
+        generic.edit.CreateView):
+
+    form_class = SfForm
+
+    form_valid_message = 'Pridėta nauja sąskaita faktūra.'
+    template_name = 'sf_form.html'
+
+    def get(self, request, *args, **kwargs):
+        """ Perraso get is klases BaseCreateView.
+
+        Gauna kwargs, perduota id, pagal kuri inicijuojant forma suraso i ja pradines reiksmes
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        id_pk = kwargs['id_pk']
+        preke = get_object_or_404(Sutartis, pk=id_pk).kodas.preke
+        suma = get_object_or_404(Sutartis, pk=id_pk).suma
+        data = datetime.today().strftime('%Y-%m-%d')
+
+        self.form_class.initial = {
+            'pavadinimas': preke,
+            'suma': suma,
+            'data': data,
+            'sutartisid': id_pk
+        }
+        return super(SfAdd, self).get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        obj = Sutartis.objects.get(pk=self.kwargs['id_pk'])
+        return obj
+
+    def get_success_url(self):
+        if 'id_pk' in self.kwargs:
+            id_pk = self.kwargs['id_pk']
+            # gaunam vien tik VP koda
+            kodas = Sutartis.objects.filter(pk=id_pk).first().kodas.kodas
+        else:
+            kodas = '404'
+        return reverse_lazy('sutartis_view', kwargs={'kodas': kodas})
+
+    def get_context_data(self, **kwargs):
+        context = super(SfAdd, self).get_context_data(**kwargs)
+        id_pk = self.kwargs['id_pk']
+        context['sutartis'] = get_object_or_404(Sutartis, pk=id_pk)
+
+        # context_view = context['view']
+        # context_kwargs = context_view.kwargs['kodas']
+        # context['kodas'] = Planas.objects.get(kodas=context_kwargs)
+        # context['visi_tiekejai'] = Sutartis.objects.all().values_list('tiekejas', flat=True).distinct()
+        return context

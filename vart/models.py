@@ -56,9 +56,8 @@ class Planas(models.Model):
 class Sutartis(models.Model):
     kodas = models.ForeignKey(
         Planas, to_field='kodas',
-        on_delete=models.SET_NULL,
-        verbose_name='Kodas',
-        null=True
+        on_delete=models.CASCADE,
+        verbose_name='Kodas'
         )
     '''
     preke_sut = models.ForeignKey(
@@ -97,5 +96,32 @@ class Sutartis(models.Model):
         verbose_name_plural = "Sutartis"
 
     def __str__(self):
-        return self.tiekejas
+        k = self.kodas.kodas
+        return 'ID:' + str(self.id)\
+               + ', KODAS: ' + self.kodas.kodas\
+               + ', PREKE: ' + self.kodas.preke\
+               + ', DATA: ' + self.data.strftime('%Y-%m-%d')\
+               + ', TIEKEJAS: ' + self.tiekejas
 
+
+class Sf(models.Model):
+    sf = models.CharField(max_length=50, verbose_name='Sąskaitos faktūros Nr.', unique=True)
+    sutartisid = models.ForeignKey(Sutartis, on_delete=models.CASCADE)
+    suma = models.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        verbose_name='Sąsk. faktūros suma'
+        )
+    data = models.DateField(verbose_name='Sąsk. faktūros data')
+    pavadinimas = models.CharField(max_length=255, verbose_name='Pirkimo objektas')
+
+    def __str__(self):
+        return 'SUTARTIS: ' + self.sutartisid.kodas.kodas + ': ' + self.sutartisid.kodas.preke\
+               + ', S.F.: ' + self.sf\
+               + ', PAVADINIMAS: ' + self.pavadinimas\
+               + ', S.F. SUMA: ' + str(self.suma)\
+               + ', SUTARTIES DATA/S.F. DATA: ' + str(self.sutartisid.data) + '/' + str(self.data)
+
+    class Meta:
+        verbose_name = "Sąskaitos faktūros"
+        verbose_name_plural = "Sąskaitos faktūros"

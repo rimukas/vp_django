@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, ButtonHolder, Submit, HTML, Button, Field
 from django import forms
-from .models import Planas, Sutartis
+from .models import Planas, Sutartis, Sf
 
 
 class RegistrationForm(UserCreationForm):
@@ -166,3 +166,33 @@ class LaikotarpisForm(forms.Form):
     date_from = forms.DateField()  # max_length=10
     date_to = forms.DateField()
     kodas = forms.CharField(max_length=30)
+
+
+class SfForm(forms.ModelForm):
+
+    class Meta:
+        model = Sf
+        fields = ['sf', 'data', 'suma', 'pavadinimas', 'sutartisid']
+
+    def __init__(self, *args, **kwargs):
+        super(SfForm, self).__init__(*args, **kwargs)
+
+        self.fields['pavadinimas'].initial = SfForm.initial['pavadinimas']
+        self.fields['suma'].initial = SfForm.initial['suma']
+        self.fields['data'].initial = SfForm.initial['data']
+        self.fields['sutartisid'].initial = SfForm.initial['sutartisid']
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+            'sf',
+            'data',
+            'suma',
+            'pavadinimas',
+            'sutartisid',
+            ButtonHolder(
+                Submit('add', 'Įrašyti', css_class='btn-success'),
+                Button('cancel', 'Grįžti neįrašius', css_class='btn-primary', onclick="window.history.back()")
+            )
+        )

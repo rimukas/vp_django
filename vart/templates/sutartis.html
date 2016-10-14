@@ -27,12 +27,13 @@
             <th>Tiekėjas</th>
             <th>Pastaba (nebūtina)</th>
             <th>Ar tai žalias pirkimas?</th>
+            <th>Sąskaitos faktūros</th>
         </tr>
         </thead>
         <tbody>
         {% for k in kodas_filtered %}
             <tr>
-                <td>
+                <td white-space: nowrap>
                     {{ k.id }}
                     <a class="btn btn-primary" role="button"
                        href={% url 'sutartis_update' id_pk=k.id %} data-toggle="tooltip" title="Redaguoti eilutę">
@@ -59,7 +60,18 @@
                 <td>
                     {% if k.zalias %}
                         <span class="glyphicon glyphicon-ok"></span>
-                    {% endif %}
+                    {% endif %}</td>
+                <td>
+                    <a class="btn btn-success" role="button"
+                       href={% url 'sf_add' id_pk=k.id %} data-toggle="tooltip" title="Pridėti sąskaitą faktūrą">
+                        <span class="glyphicon glyphicon-euro"></span>
+                    </a>
+                    <a class="btn btn-primary" role="button"
+                       href={% url 'sf_add' id_pk=k.id %} data-toggle="tooltip" title="Peržiūrėti sąskaitas faktūras">
+                        <span class="glyphicon glyphicon-option-horizontal"></span>
+                    </a>
+                </td>
+
             </tr>
         {% endfor %}
         </tbody>

@@ -48,5 +48,6 @@ urlpatterns = [
     url(r'^mano_sutartis/delete/del/(?P<id_pk>[0-9-]+)/$', views.SutartisDelete.as_view(), name='sutartis_delete'),
     url(r'^mano_sutartis/sutartis_add/(?P<kodas>[0-9-]+)/$', views.SutartisAdd.as_view(), name='sutartis_add'),
     url(r'^laikotarpis/$', views.laikotarpis, name='laikotarpis'),
+    url(r'^sf_add/(?P<id_pk>[0-9-]+)/$', views.SfAdd.as_view(), name='sf_add'),
     # url(r'^mano_sutartis/copy/(?P<kodas>[0-9]+)/$', views.SutartisUpdate.as_view(), name='sutartis_update'),
 ]
