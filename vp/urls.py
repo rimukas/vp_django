@@ -55,9 +55,9 @@ urlpatterns += [
     url(r'^faktura/(?P<id_pk>[0-9-]+)/$', views.FakturaView.as_view(), name='faktura'),
     url(r'^faktura/add/(?P<id_pk>[0-9-]+)/$', views.FakturaAdd.as_view(), name='faktura_add'),
     url(r'^faktura/update/(?P<id_pk>[0-9-]+)/$', views.FakturaUpdate.as_view(), name='faktura_update'),
-    url(r'^faktura/copy/(?P<id_pk>[0-9-]+)/$', views.FakturaCopy.as_view(), name='faktura_copy'),
-    url(r'^faktura/delete/(?P<id_pk>[0-9-]+)/$', views.Faktura.as_view(), name='faktura_delete_confirm'),
-    url(r'^faktura/delete/del/(?P<id_pk>[0-9-]+)/$', views.FakturaDelete.as_view(), name='faktura_delete'),
+    url(r'^faktura/copy/(?P<id_pk>[0-9-]+)/$', views.FakturaUpdate.as_view(), name='faktura_copy'),
+    url(r'^faktura/delete/(?P<id_pk>[0-9-]+)/$', views.FakturaUpdate.as_view(), name='faktura_delete_confirm'),
+    url(r'^faktura/delete/del/(?P<id_pk>[0-9-]+)/$', views.FakturaUpdate.as_view(), name='faktura_delete'),
 ]
 
 if settings.DEBUG:

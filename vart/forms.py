@@ -196,3 +196,31 @@ class SfForm(forms.ModelForm):
                 Button('cancel', 'Grįžti neįrašius', css_class='btn-primary', onclick="window.history.back()")
             )
         )
+
+
+#  fakturos redagavimas
+class FakturaUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Sf
+        fields = ['sf', 'data', 'suma', 'pavadinimas']
+
+    def __init__(self, *args, **kwargs):
+
+        super(FakturaUpdateForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+            'sf',
+            'data',
+            'suma',
+            'pavadinimas',
+            ButtonHolder(
+                Submit('add', 'Įrašyti', css_class='btn-success'),
+                Button('cancel', 'Grįžti neįrašius', css_class='btn-primary', onclick="window.history.back()"),
+                ),
+            )
