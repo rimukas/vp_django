@@ -13,42 +13,55 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-
-from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls import url, include
 from django.contrib import admin
 from vart import views
-#from vart.views import HomePageView
-#from vart.views import SignUpView
-#from vart.views import LoginView
-#from vart.views import LogOutView
-#from vart.views import PlanasView
-#from vart.views import kodas_view
-#from vart.views import Planas
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('^$', views.HomePageView.as_view(), name='home'),
-    # url('^home/', views.HomePageView.as_view(), name='home'),
-    url(r'^accounts/register/$', views.SignUpView.as_view(), name='signup'),
+    # register nenaudojamas, vartotojus prie sistemos turi prideti administratorius
+    # url(r'^accounts/register/$', views.SignUpView.as_view(), name='signup'),
     url(r'^accounts/login/$', views.LoginView.as_view(), name='login'),
     url(r'^accounts/logout/$', views.LogOutView.as_view(), name='logout'),
-    # url(r'^planas/$', views.planas_view, name='planas'), PlanasView
+    url(r'^laikotarpis/$', views.laikotarpis, name='laikotarpis'),
+]
+
+# planas
+urlpatterns += [
     url(r'^planas/$', views.PlanasView.as_view(), name='planas'),
     url(r'^planas/(?P<kodas>\d+)/$', views.PlanasUpdate.as_view(), name='planas_update'),
     url(r'^planas/delete/(?P<kodas>\d+)/$', views.planas_delete_confirm, name='planas_delete_confirm'),
-    url(r'^planas/delete/del/(?P<kodas>\d+)/$', views.planas_delete, name='planas_delete'),
+    url(r'^planas/delete/del/(?P<kodas>\d+)/$', views.PlanasDelete.as_view(), name='planas_delete'),
     # url(r'^planas/delete/del/(?P<kodas>\d+)/$', views.PlanasDelete.as_view(), name='planas_delete'),
     # url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
     url(r'^planas/kodas_add$', views.PlanasAdd.as_view(), name='planas_add'),
+]
+
+# sutartis
+urlpatterns += [
     url(r'^mano_sutartis/(?P<kodas>[0-9-]+)/$', views.sutartis_view, name='sutartis_view'),
     url(r'^mano_sutartis/update/(?P<id_pk>[0-9-]+)/$', views.SutartisUpdate.as_view(), name='sutartis_update'),
     url(r'^mano_sutartis/copy/(?P<id_pk>[0-9-]+)/$', views.sutartis_copy, name='sutartis_copy'),
     url(r'^mano_sutartis/delete/(?P<id_pk>[0-9-]+)/$', views.sutartis_delete_confirm, name='sutartis_delete_confirm'),
     url(r'^mano_sutartis/delete/del/(?P<id_pk>[0-9-]+)/$', views.SutartisDelete.as_view(), name='sutartis_delete'),
     url(r'^mano_sutartis/sutartis_add/(?P<kodas>[0-9-]+)/$', views.SutartisAdd.as_view(), name='sutartis_add'),
-    url(r'^laikotarpis/$', views.laikotarpis, name='laikotarpis'),
-    url(r'^sf_add/(?P<id_pk>[0-9-]+)/$', views.SfAdd.as_view(), name='sf_add'),
-    url(r'^faktura/(?P<id_pk>[0-9-]+)/$', views.FakturaView.as_view(), name='faktura'),
-    # url(r'^mano_sutartis/copy/(?P<kodas>[0-9]+)/$', views.SutartisUpdate.as_view(), name='sutartis_update'),
 ]
+
+# saskaitos fakturos
+urlpatterns += [
+    url(r'^faktura/(?P<id_pk>[0-9-]+)/$', views.FakturaView.as_view(), name='faktura'),
+    url(r'^faktura/add/(?P<id_pk>[0-9-]+)/$', views.FakturaAdd.as_view(), name='faktura_add'),
+    url(r'^faktura/update/(?P<id_pk>[0-9-]+)/$', views.FakturaUpdate.as_view(), name='faktura_update'),
+    url(r'^faktura/copy/(?P<id_pk>[0-9-]+)/$', views.FakturaCopy.as_view(), name='faktura_copy'),
+    url(r'^faktura/delete/(?P<id_pk>[0-9-]+)/$', views.Faktura.as_view(), name='faktura_delete_confirm'),
+    url(r'^faktura/delete/del/(?P<id_pk>[0-9-]+)/$', views.FakturaDelete.as_view(), name='faktura_delete'),
+]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

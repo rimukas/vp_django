@@ -95,10 +95,10 @@ class PlanasUpdateForm(forms.ModelForm):
             # HTML('<br><a class="btn btn-warning" href={% url "planas" %}>Grįžti neįrašius</a>'),
             )
 
-    def clean(self):
-        f = self.fields['data']
-        print(f)
-        return
+    # def clean(self):
+    #     f = self.fields['kodas']
+    #     print(f)
+    #     return
 
 
 #  prekes/paslaugos/darbo istrynimas
