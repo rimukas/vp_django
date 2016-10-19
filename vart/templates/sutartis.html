@@ -63,7 +63,7 @@
                     {% endif %}</td>
                 <td>
                     <a class="btn btn-warning" role="button"
-                       href={% url 'sf_add' id_pk=k.id %} data-toggle="tooltip" title="Pridėti sąskaitą faktūrą">
+                       href={% url 'faktura_add' id_pk=k.id %} data-toggle="tooltip" title="Pridėti sąskaitą faktūrą">
                         <span class="glyphicon glyphicon-euro"></span>
                     </a>
                 {% for f in fakturos %}
@@ -81,7 +81,7 @@
         </tbody>
         </p>
     </table>
-
+<a class="btn btn-primary" href="{% url 'laikotarpis' %}"><span class="glyphicon glyphicon-chevron-left"></span>Grįžti į VP kodo pasirinkimą</a>
     <script>
         $(document).ready(function () {
             $("#table_sutartis").DataTable({

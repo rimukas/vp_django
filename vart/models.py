@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
+from model_utils.models import SoftDeletableModel
 
 
 # Create your models here.
@@ -21,7 +22,14 @@ class Vartotojai(models.Model):
 '''
 
 
-class Planas(models.Model):
+class Planas(SoftDeletableModel):
+    """ Planas
+
+    Paveldi klase SoftDeletableModel kartu su Manager'iu SoftDeletableManager.
+    Reikalinga tam, kad netrintu jau ivesto plano is duombazes, kad reikalui esant
+    ta plana butu galima atstatyti tam paciam ar kitam vartotoji.
+    SoftDeletableModel netrina iraso, o tik ji pazymi is_deleted.
+    """
     PDP = (
         ('paslauga', 'Paslauga'),
         ('darbas', 'Darbas'),
@@ -43,6 +51,9 @@ class Planas(models.Model):
         default='preke',
         choices=PDP
         )
+
+    # deafaultinis Manager'is, grazina visus irasus, tame tarpe ir "istrintus"
+    include_deleted = models.Manager()
 
     class Meta:
         verbose_name = "Planas"
@@ -105,7 +116,7 @@ class Sutartis(models.Model):
 
 
 class Sf(models.Model):
-    sf = models.CharField(max_length=50, verbose_name='Sąskaitos faktūros Nr.', unique=True)
+    sf = models.CharField(max_length=50, verbose_name='Sąskaitos faktūros Nr.')
     sutartisid = models.ForeignKey(Sutartis, on_delete=models.CASCADE)
     suma = models.DecimalField(
         max_digits=9,

@@ -20,6 +20,7 @@ import re
 from django.contrib.auth.decorators import login_required
 # from django.utils.decorators import method_decorator
 # from django.views.generic.edit import CreateView
+from model_utils.models import SoftDeletableModel
 
 
 class HomePageView(generic.TemplateView):
@@ -167,6 +168,27 @@ class PlanasUpdate(
         return obj
 
 
+class PlanasDelete(
+        views.LoginRequiredMixin,
+        generic.edit.DeleteView,
+        SoftDeletableModel):
+
+        # form_class = PlanasDeleteForm
+        # form_valid_message = 'Planas pataisytas!'
+        # template_name = 'planas_delete_confirm.html'
+        model = Planas
+        form_valid_message = 'Planas sėkmingai ištrintas.'
+
+        # success_url = reverse_lazy('planas')
+
+        def get_object(self, queryset=None):
+            obj = Planas.objects.get(kodas=self.kwargs['kodas'])
+            return obj
+
+        def get_success_url(self):
+            return reverse_lazy('planas')
+
+
 @login_required()
 def planas_delete_confirm(request, kodas):
     """ Patvirtinimo langas VP kodo istrynimui.
@@ -182,32 +204,32 @@ def planas_delete_confirm(request, kodas):
     return render(request, 'planas_delete_confirm.html', {'kodas': kodas})
 
 
-@login_required()
-def planas_delete(request, kodas):
-    """ Plano (vieno VP kodo) pasalinimas.
-
-    Is tiesu VP kodo neistrina, o tik priskiria ji vartotojui "delete",
-    tad reikalui esant ji vel galima atstatyti ar priskirti kitam vartotojui
-
-    :param request:
-    :param kodas:
-    :return:
-    """
-    # naujas Plano objektas su kodu, perduotu per nuoroda
-    k = Planas.objects.get(kodas=kodas)
-    # naujas User objektas, kurio vardas "delete"
-    u = User.objects.get(username='deleted')
-    # "delete" vartotojui priskiriam perduota koda
-    k.organizatorius = u
-    # saugo duombazeje
-    k.save()
-    # permetam i puslapi "planas.html"
-    current_user = request.user.username
-    context = {
-        'current_user': current_user,
-        'kodas': Planas.objects.filter(
-            organizatorius_id=current_user).values()}
-    return render(request, 'planas.html', context)
+# @login_required()
+# def planas_delete(request, kodas):
+#     """ Plano (vieno VP kodo) pasalinimas.
+#
+#     Is tiesu VP kodo neistrina, o tik priskiria ji vartotojui "delete",
+#     tad reikalui esant ji vel galima atstatyti ar priskirti kitam vartotojui
+#
+#     :param request:
+#     :param kodas:
+#     :return:
+#     """
+#     # naujas Plano objektas su kodu, perduotu per nuoroda
+#     k = Planas.objects.get(kodas=kodas)
+#     # naujas User objektas, kurio vardas "delete"
+#     u = User.objects.get(username='deleted')
+#     # "delete" vartotojui priskiriam perduota koda
+#     k.organizatorius = u
+#     # saugo duombazeje
+#     k.save()
+#     # permetam i puslapi "planas.html"
+#     current_user = request.user.username
+#     context = {
+#         'current_user': current_user,
+#         'kodas': Planas.objects.filter(
+#             organizatorius_id=current_user).values()}
+#     return render(request, 'planas.html', context)
 
 
 # uzkomentuotas Planas eilutes pasalinimas is duombazes
@@ -441,7 +463,7 @@ class SutartisAdd(
         generic.edit.CreateView):
 
     form_class = SutartisUpdateForm
-    form_valid_message = 'Pridėta nauja sutartis.'
+    form_valid_message = 'Pridėta nauja sutartis '
     template_name = 'sutartis_form.html'
 
     # k = get_object(queryset=None)
@@ -472,6 +494,11 @@ class SutartisAdd(
     def get_success_url(self):
         if 'kodas' in self.kwargs:
             kodas = self.kwargs['kodas']
+            s = Sutartis.objects.filter(kodas=kodas).last()
+            self.form_valid_message = self.form_valid_message \
+                + ' | data: ' + s.data.strftime('%Y-%m-%d') \
+                + ' | tiekėjas: ' + s.tiekejas \
+                + ' | suma: ' + str(s.suma)
         else:
             kodas = '404'
         return reverse_lazy('sutartis_view', kwargs={'kodas': kodas})
@@ -485,7 +512,7 @@ class SutartisAdd(
         return context
 
 
-class SfAdd(
+class FakturaAdd(
         views.LoginRequiredMixin,
         views.FormValidMessageMixin,
         generic.edit.CreateView):
@@ -496,7 +523,7 @@ class SfAdd(
     # perraso atributa is FormMixin
     form_class = SfForm
     # perraso atributa is FormValidMessageMixin
-    form_valid_message = 'Pridėta nauja sąskaita faktūra.'
+    form_valid_message = 'Pridėta nauja sąskaita faktūra'
     # perraso atributa is TemplateResponseMixin
     template_name = 'sf_form.html'
 
@@ -514,7 +541,7 @@ class SfAdd(
         id_pk = kwargs['id_pk']
         preke = get_object_or_404(Sutartis, pk=id_pk).kodas.preke
         suma = get_object_or_404(Sutartis, pk=id_pk).suma
-        data = datetime.today().strftime('%Y-%m-%d')
+        data = get_object_or_404(Sutartis, pk=id_pk).data  # datetime.today().strftime('%Y-%m-%d')
 
         self.form_class.initial = {
             'pavadinimas': preke,
@@ -522,7 +549,7 @@ class SfAdd(
             'data': data,
             'sutartisid': id_pk
         }
-        return super(SfAdd, self).get(request, *args, **kwargs)
+        return super(FakturaAdd, self).get(request, *args, **kwargs)
 
     # perraso metoda is SingleObjectMixin
     def get_object(self, queryset=None):
@@ -533,14 +560,20 @@ class SfAdd(
     def get_success_url(self):
         if 'id_pk' in self.kwargs:
             id_pk = self.kwargs['id_pk']
+            s = get_object_or_404(Sf, sutartisid_id=id_pk)
             # gaunam vien tik VP koda
             kodas = Sutartis.objects.filter(pk=id_pk).first().kodas.kodas
+            self.form_valid_message = self.form_valid_message\
+                + ' | data: ' + s.data.strftime('%Y-%m-%d')\
+                + ' | S.F. Nr.: ' + s.sf\
+                + ' | pirkimo obj.: ' + s.pavadinimas\
+                + ' | suma: ' + str(s.suma)
         else:
             kodas = '404'
         return reverse_lazy('sutartis_view', kwargs={'kodas': kodas})
 
     def get_context_data(self, **kwargs):
-        context = super(SfAdd, self).get_context_data(**kwargs)
+        context = super(FakturaAdd, self).get_context_data(**kwargs)
         id_pk = self.kwargs['id_pk']
         context['context'] = get_object_or_404(Sutartis, pk=id_pk)
 

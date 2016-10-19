@@ -33,17 +33,17 @@
                 <td style="white-space:nowrap;">
                     {{ k.id }}
                     <a class="btn btn-primary" role="button"
-                       href={% url 'sutartis_update' id_pk=k.id %} data-toggle="tooltip" title="Redaguoti eilutę">
+                       href={% url 'faktura_update' id_pk=k.id %} data-toggle="tooltip" title="Redaguoti eilutę">
                         <span class="glyphicon glyphicon-edit"></span>
                     </a>
 
                     <a class="btn btn-success" role="button"
-                       href={% url 'sutartis_copy' id_pk=k.id %} data-toggle="tooltip" title="Kopijuoti eilutę">
+                       href={% url 'faktura_copy' id_pk=k.id %} data-toggle="tooltip" title="Kopijuoti eilutę">
                         <span class="glyphicon glyphicon-copy"></span>
                     </a>
 
                     <a class="btn btn-danger btn-xs" role="button"
-                       href={% url 'sutartis_delete_confirm' id_pk=k.id %} data-toggle="tooltip"
+                       href={% url 'faktura_delete_confirm' id_pk=k.id %} data-toggle="tooltip"
                        title="Ištrinti eilutę">
                         <span class="glyphicon glyphicon-remove"></span>
                     </a>

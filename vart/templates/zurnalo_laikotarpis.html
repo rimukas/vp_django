@@ -6,77 +6,84 @@
 
     <div class="panel panel-primary">
 
-    <div class="panel-heading">Pasirink rodomą laikotarpį</div>
-    <div class="panel-body">
-    <div class="ws-datepicker">
-            <input id="datefrom" name="dateFrom" type="text" value="{{ nuo_kada|date:'Y-m-d' }}">
-         ~ <input id="dateto" name="dateTo" type="text" value="{{ iki_kada|date:'Y-m-d' }}">
-    </div><br><br>
+        <div class="panel-heading">Pasirink rodomą laikotarpį</div>
+        <div class="panel-body">
+            <div class="ws-datepicker">
+                <input id="datefrom" name="dateFrom" type="text" value="{{ nuo_kada|date:'Y-m-d' }}">
+                ~ <input id="dateto" name="dateTo" type="text" value="{{ iki_kada|date:'Y-m-d' }}">
+            </div>
+            <br><br>
 
 
-    <form action="#" method="post">{% csrf_token %}
-        {% comment %}
+            <form action="#" method="post">{% csrf_token %}
+                {% comment %}
         <input id="date_from" name="date_from" type="hidden">
         <input id="date_to" name="date_to" type="hidden" >
         {% endcomment %}
-        {% for f in form %}
-            {{ f.errors }}
-        {{  f.as_hidden }}
-        {% endfor %}
+                {% for f in form %}
+                    {{ f.errors }}
+                    {{ f.as_hidden }}
+                {% endfor %}
 
-     <div><h4><strong><span  class="text-muted">Kodas  </span></strong><strong id="vpkodas" class="text-primary"></strong></h4></div><span id="frm_kodas"></span>
-        <ul class="nav nav-pills" role="tablist">
-    <li role="presentation" class="dropdown">
-        <a class="dropdown-toggle btn btn-default" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <span class="glyphicon glyphicon-list"></span> Pasirink kodą
-        <span class="caret"></span>
-    </a>
-        <ul class="dropdown-menu" aria-labelledby="dLabel">
-            {% for k in kodas %}
-                <li><a class="kodas_click" id={{ k.id }} href="#">{{ k }}<span class="hidden tik-kodas">{{ k.kodas }}</span></a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    </ul><br><br>
+                <div><h4><strong><span class="text-muted">Kodas  </span></strong><strong id="vpkodas"
+                                                                                         class="text-primary"></strong>
+                </h4></div>
+                <span id="frm_kodas"></span>
+                <ul class="nav nav-pills" role="tablist">
+                    <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle btn btn-default" href="#" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-list"></span> Pasirink kodą
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dLabel">
+                            {% for k in kodas %}
+                                <li><a class="kodas_click" id={{ k.id }} href="#">{{ k }}<span
+                                        class="hidden tik-kodas">{{ k.kodas }}</span></a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+                <br><br>
 
 
+                <button id="toliau" type="submit" class="btn btn-primary hidden">
+                    Toliau
+                    <i class="glyphicon glyphicon-arrow-right"></i>
+                </button>
+            </form>
 
-        <button type="submit" class="btn btn-primary">
-            Toliau
-            <i class="glyphicon glyphicon-arrow-right"></i>
-        </button>
-    </form>
-
-</div>
-</div>
+        </div>
+    </div>
 
 
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var element = document.getElementById("m2");
             element.classList.add("active");
-            $(function() {
-                $(".ws-datepicker").wsCalendar({"image-base-url" : "{% static '/vart/images/' %}"});
-                });
-            $("a.kodas_click").click(function() {
-                    var id = $(this).attr("id");
-                    $("#vpkodas").html($("#"+id).html());
+            $(function () {
+                $(".ws-datepicker").wsCalendar({"image-base-url": "{% static '/vart/images/' %}"});
+            });
+            $("a.kodas_click").click(function () {
+                var id = $(this).attr("id");
+                $("#vpkodas").html($("#" + id).html());
 
                 $("input#id_kodas").val($("a#" + id + ".kodas_click > span.hidden.tik-kodas").html());
 
-
-                });
-            $("form").submit(function() {
+                // jei pasirinktas VP kodas, tai parodo paslepta mygtuka "Toliau"
+                if (document.getElementById("vpkodas").innerText != '') {
+                    document.getElementById("toliau").classList.remove("hidden");
+                }
+            });
+            $("form").submit(function () {
                 $("#id_date_from").val($("#datefrom").val());
                 $("#id_date_to").val($("#dateto").val());
                 $("input#id_kodas").val($("a#" + id + ".kodas_click > span.hidden.tik-kodas").html());
-                })
+            })
+
+
         })
-
-
-
-
 
 
     </script>
