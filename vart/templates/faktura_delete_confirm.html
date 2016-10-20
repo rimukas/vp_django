@@ -1,0 +1,14 @@
+{% extends '_layouts/base.html' %}
+{% block content%}
+<h3>
+<div class="well"><br><h2><strong>Dėmesio!</strong></h2><br>
+    Sąskaita faktūra Nr. <strong>{{ context.sf }}, data: {{ context.data }}, suma: {{ context.suma }}</strong>
+    bus <strong>negrįžtamai</strong> pašalinta.<br>
+    Ar tu tikrai nori ją pašalinti?</p></h3>
+<form action="{% url 'faktura_delete' id_pk=context.id %}" method="post">{% csrf_token %}
+    <input type="button" class="btn btn-primary btn-lg active" value="Nenoriu šalinti" onclick="window.history.back()" />
+     Taip, tikrai noriu pašalinti  <input type="submit" class="btn btn-danger btn-xs" value="x" />
+
+</form>
+
+{% endblock content %}

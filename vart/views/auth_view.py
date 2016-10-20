@@ -1,10 +1,11 @@
 from django.views import generic
 from braces import views
 from vart.forms import RegistrationForm, LoginForm
-from vart.models import Planas
+from vart.models import Planas, Sutartis, Sf, User
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
+from datetime import date, datetime
 
 
 class HomePageView(generic.TemplateView):
@@ -20,6 +21,18 @@ class HomePageView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
         user_name = self.request.user.username
+
+        data_nuo = date(date.today().year, 1, 1)
+        data_iki = date(date.today())
+
+        # kodas = get_object_or_404(Planas, kodas=kodas)
+
+        planas = Planas.objects.filter(organizatorius=user_name)
+        sutartys = Sutartis.objects.filter(kodas__kodas__in=planas)
+        sutartys = sutartys.filter(
+            data__range=[data_nuo, data_iki])
+        fakturos = Sf.objects.filter(sutartisid_id__in=sutartys)
+
         context['kodai'] = Planas.objects.filter(organizatorius=user_name)
         return context
 

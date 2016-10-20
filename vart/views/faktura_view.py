@@ -1,9 +1,10 @@
 from vart.models import Sutartis, Sf
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from braces import views
 from vart.forms import FakturaUpdateForm, SfForm
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 
 class FakturaAdd(
@@ -125,6 +126,14 @@ class FakturaUpdate(views.LoginRequiredMixin, generic.UpdateView):
             id_pk = '404'
         return reverse_lazy('faktura', kwargs={'id_pk': id_pk})
 
+
+@login_required()
+def faktura_delete_confirm(request, id_pk):
+    context = {
+        'context': Sf.objects.get(pk=id_pk)
+    }
+    return render(request, 'faktura_delete_confirm.html', context)
+
 #
 # @login_required()
 # def faktura_copy(id_pk):
@@ -141,4 +150,27 @@ class FakturaUpdate(views.LoginRequiredMixin, generic.UpdateView):
 #     nauja.pk = None
 #     nauja.save()
 #     return redirect('sutartis_update', id_pk=nauja.pk)
+
+
+class FakturaDelete(
+        views.LoginRequiredMixin,
+        views.FormValidMessageMixin,
+        generic.edit.DeleteView):
+
+    template_name = 'faktura_delete_confirm.html'
+    model = Sf
+    form_valid_message = 'Faktūra sėkmingai ištrinta.'
+
+    def get_object(self, queryset=None):
+        obj = Sf.objects.get(pk=self.kwargs['id_pk'])
+        return obj
+
+    def get_success_url(self):
+        if 'id_pk' in self.kwargs:
+            id_pk = self.kwargs['id_pk']
+            id_pk = Sf.objects.get(pk=id_pk).sutartisid_id
+            kodas = Sutartis.objects.get(pk=id_pk).kodas.kodas
+        else:
+            kodas = '404'
+        return reverse_lazy('sutartis_view', kwargs={'kodas': kodas})
 
