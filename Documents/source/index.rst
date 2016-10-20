@@ -7,19 +7,13 @@ Welcome to VP's documentation!
 ==============================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 12
+   :caption: Turinys:
 
    apie
    savokos
+   pradzia
    idiegimas
 
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

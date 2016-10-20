@@ -2,6 +2,33 @@
 
 {% block headline %}<h1>Viešųjų pirkimų žurnalas</h1>{% endblock headline %}
 
-{% block content %}
+    {% block content %}
+        {% if username %}
+            <div><h3>Įvykdytų pirkimų apžvalga</h3></div>
+       <div>Rodomas laikotarpis nuo <strong>{{ data_nuo }}</strong> iki <strong>{{ data_iki }}</strong></div><br>
+        {% for f in fakturos %}
+            <div>
+                <div class="bg-primary"><strong>{{ f.kodas__kodas }}: {{ f.kodas__preke }}</strong>, numatytos išlaidos:
+                    <strong>{{ f.kodas__islaidos }}</strong></div>
+                <div>Įvestų sąskaitų faktūrų skaičius:
+                    <strong>
+                        {{ f.sf_count }}
+                    </strong>; bendra sąsk. faktūrų suma:
+                    <strong>
+                        {{ f.sf_sum }}
+                    </strong>; plano įvykdymas proc.:
+                    <strong>
+                        {{ f.proc|floatformat:1 }}%
+                    </strong>
+                </div>
+            </div>
+        {% endfor %}
 
-{% endblock %}
+
+        {% else %}
+            {% block notlogged %}{% endblock %}
+
+{% endif %}
+    {% endblock content %}
+
+

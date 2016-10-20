@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Bendros sąvokos ir susitarimai &mdash; VP 0.1.0 documentation</title>
+  <title>Darbo pradžia &mdash; VP 0.1.0 documentation</title>
   
 
   
@@ -34,8 +34,8 @@
               href="genindex.html"/>
         <link rel="search" title="Paieška" href="search.html"/>
     <link rel="top" title="VP 0.1.0 documentation" href="index.html"/>
-        <link rel="next" title="Darbo pradžia" href="pradzia.html"/>
-        <link rel="prev" title="Apie projektą" href="apie.html"/> 
+        <link rel="next" title="Sistemos įdiegimas" href="idiegimas.html"/>
+        <link rel="prev" title="Bendros sąvokos ir susitarimai" href="savokos.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -87,11 +87,8 @@
                 <p class="caption"><span class="caption-text">Turinys:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="apie.html">Apie projektą</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Bendros sąvokos ir susitarimai</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#duomenu-bazes-ypatumai">Duomenų bazės ypatumai</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="pradzia.html">Darbo pradžia</a></li>
+<li class="toctree-l1"><a class="reference internal" href="savokos.html">Bendros sąvokos ir susitarimai</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Darbo pradžia</a></li>
 <li class="toctree-l1"><a class="reference internal" href="idiegimas.html">Sistemos įdiegimas</a></li>
 </ul>
 
@@ -123,11 +120,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>Bendros sąvokos ir susitarimai</li>
+    <li>Darbo pradžia</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/savokos.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/pradzia.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -137,12 +134,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="bendros-savokos-ir-susitarimai">
-<h1>Bendros sąvokos ir susitarimai<a class="headerlink" href="#bendros-savokos-ir-susitarimai" title="Nuoroda į šią antraštę">¶</a></h1>
-<div class="section" id="duomenu-bazes-ypatumai">
-<h2>Duomenų bazės ypatumai<a class="headerlink" href="#duomenu-bazes-ypatumai" title="Nuoroda į šią antraštę">¶</a></h2>
-<p>Sąskaitų faktūrų numeriai duomenų bazėje nėra unikalūs. Tai padaryta tam, kad vieną ir tą pačią sąskaitą faktūrą galima būtų išskaidyti į dalis, į atskirus VP kodus.</p>
+  <div class="section" id="darbo-pradzia">
+<h1>Darbo pradžia<a class="headerlink" href="#darbo-pradzia" title="Nuoroda į šią antraštę">¶</a></h1>
+<p>Įdiegus programą į serverį ir sukūrus PostgreSQL duomenų bazę, pirmiausiai reikia sukurti super administratorių, kuris pridės ir valdys kitus sistemos vartotojus. Tam yra atliekama komanda:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
+</pre></div>
 </div>
+<p>Po to galima paleisti serverį:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
+</pre></div>
+</div>
+<p>Jungtis prie administavimo puslapio:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localserver</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">admin</span>
+</pre></div>
+</div>
+<p>ir pridėti kitus vartotojus.</p>
 </div>
 
 
@@ -152,10 +158,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pradzia.html" class="btn btn-neutral float-right" title="Darbo pradžia" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="idiegimas.html" class="btn btn-neutral float-right" title="Sistemos įdiegimas" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="apie.html" class="btn btn-neutral" title="Apie projektą" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="savokos.html" class="btn btn-neutral" title="Bendros sąvokos ir susitarimai" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

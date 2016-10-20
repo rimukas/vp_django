@@ -1,0 +1,1 @@
+atidaryti sia direktorija terminale ir rasyti: make html

@@ -79,12 +79,16 @@ class PlanasAdd(
 
     """
     form_class = PlanasAddForm
-    form_valid_message = 'Nauja plano eilutė įvesta sėkmingai!'
+    form_valid_message = 'Įvestas naujas kodas: '
     template_name = 'planas_create.html'
     success_url = reverse_lazy('planas_add')
 
     def form_valid(self, form):
         form.instance.organizatorius = self.request.user
+        self.form_valid_message += \
+            form.cleaned_data['kodas'] + ', ' \
+            + form.cleaned_data['preke'] + '. '\
+            + 'Gali įvesti dar vieną kodą arba spausk viršutinį meniu mygtuką "Planas".'
         return super(PlanasAdd, self).form_valid(form)
 
 

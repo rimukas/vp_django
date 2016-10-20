@@ -152,7 +152,7 @@ class SutartisAdd(
 
     form_class = SutartisUpdateForm
     form_valid_message = 'Pridėta nauja sutartis '
-    template_name = 'sutartis_form_TRINTI.html'
+    template_name = 'sutartis_form.html'
 
     def form_valid(self, form):
         """ Atlikus POST, suvienodina imones pavadinimo uzrasyma. Pvz., "IMONESPAVADINIMAS, UAB"

@@ -1,39 +1,68 @@
+from django.db.models import Sum, Count
 from django.views import generic
 from braces import views
 from vart.forms import RegistrationForm, LoginForm
-from vart.models import Planas, Sutartis, Sf, User
+from vart.models import Planas, Sutartis
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
-from datetime import date, datetime
+from datetime import date
 
 
 class HomePageView(generic.TemplateView):
     """ Pagrindinis (home) puslapis.
 
     TODO:
-    Jame turetu buti rodoma atskira informacija prisijungusiems ir
+    Jame yra rodoma atskira informacija prisijungusiems ir
     neprisijungusiems vartotojams.
 
     """
-    template_name = 'home.html'
+    template_name = 'notlogged.html'
 
     def get_context_data(self, **kwargs):
-        context = super(HomePageView, self).get_context_data(**kwargs)
+        # turbut nereikalingas
+        # context = super(HomePageView, self).get_context_data(**kwargs)
         user_name = self.request.user.username
 
         data_nuo = date(date.today().year, 1, 1)
-        data_iki = date(date.today())
+        data_iki = date(date.today().year, date.today().month, date.today().day)
 
         # kodas = get_object_or_404(Planas, kodas=kodas)
 
+        # gaunam visus vartotojui priklausancius VP plano kodus
         planas = Planas.objects.filter(organizatorius=user_name)
-        sutartys = Sutartis.objects.filter(kodas__kodas__in=planas)
-        sutartys = sutartys.filter(
-            data__range=[data_nuo, data_iki])
-        fakturos = Sf.objects.filter(sutartisid_id__in=sutartys)
 
-        context['kodai'] = Planas.objects.filter(organizatorius=user_name)
+        # filtruojam ivestas sutartis pagal pradzios ir pabaigos data
+        sutartys = Sutartis.objects.filter(
+            data__range=[data_nuo, data_iki])
+
+        # dar prafiltruojam sutartis pagal prisijungusio vartotojo VP kodus (visus),
+        # kad neimtu kitu vartotoju ivestu sutarciu
+        sut_id = sutartys.filter(kodas__in=planas)
+
+        # velniskai sudetinga uzklausa ):
+        # is jos paimtus duomenis atvaizduoja pagrindiniam puslapyje "ivykdytu pirkimu apzvalgoje".
+        # paimam pagal data ir prisijungusio vartotojo VP kodus isfiltruotas sutartis sut_id,
+        # grupuojam jas pagal laukus:
+        # Sutartys.kodas->Planas.preke,
+        # Sutartys.kodas->Planas.kodas,
+        # Sutartys.kodas->Planas.islaidos,
+        # toliau pagal atbulini ForeignKey is Sutartys i Sf skaiciuojam
+        # Sf.sf count, Sf.suma sum, ir dar suskaiciuojam procentus.
+        # gaunam QuerySet, priskiriam prie "fakturos", ir siunciam i puslapi.
+        fakturos = sut_id.values(
+            'kodas__preke', 'kodas__kodas', 'kodas__islaidos').\
+            annotate(
+            sf_count=Count('sf__sf'),
+            sf_sum=Sum('sf__suma'),
+            proc=(Sum('sf__suma')/Sum('kodas__islaidos'))*100)
+
+        context = {
+            'fakturos': fakturos,
+            'username': self.request.user.username,
+            'data_nuo': data_nuo,
+            'data_iki': data_iki,
+        }
         return context
 
 
@@ -61,7 +90,7 @@ class LoginView(
 
     """
 
-    form_valid_message = 'Tu prisiloginai!'
+    form_valid_message = 'Tu sėkmingai prisijungei '
     form_class = LoginForm
     success_url = reverse_lazy('home')
     template_name = 'accounts/login.html'
@@ -72,6 +101,7 @@ class LoginView(
         user = authenticate(username=username, password=password)
 
         if user is not None and user.is_active:
+            self.form_valid_message += 'vartotojo ' + '"' + username + '"' + ' vardu.'
             login(self.request, user)
             return super(LoginView, self).form_valid(form)
         else:
