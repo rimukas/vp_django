@@ -33,8 +33,10 @@ class HomePageView(generic.TemplateView):
         planas = Planas.objects.filter(organizatorius=user_name)
 
         # filtruojam ivestas sutartis pagal pradzios ir pabaigos data
-        sutartys = Sutartis.objects.filter(
-            data__range=[data_nuo, data_iki])
+        # sutartys = Sutartis.objects.filter(data__range=[data_nuo, data_iki])
+
+        metai = date.today().year
+        sutartys = Sutartis.objects.filter(data__year=metai)
 
         # dar prafiltruojam sutartis pagal prisijungusio vartotojo VP kodus (visus),
         # kad neimtu kitu vartotoju ivestu sutarciu
@@ -62,6 +64,7 @@ class HomePageView(generic.TemplateView):
             'username': self.request.user.username,
             'data_nuo': data_nuo,
             'data_iki': data_iki,
+            'laikotarpis': str(metai),
         }
         return context
 
