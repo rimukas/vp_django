@@ -60,6 +60,12 @@ urlpatterns += [
     url(r'^faktura/delete/del/(?P<id_pk>[0-9-]+)/$', views.FakturaDelete.as_view(), name='faktura_delete'),
 ]
 
+# ataskaitu isvedimas i pdf
+urlpatterns += [
+    url(r'^users_pdf/$', views.print_users, name='users_pdf'),
+
+]
+
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += [
