@@ -1,0 +1,131 @@
+Kompiuterio paruošimas
+----------------------
+
+Nepamirštam, kad viską galima daryti copy-paste į terminalo langą ;)
+
+1. Atnaujinam indeksus:
+::
+
+	sudo apt-get update
+
+
+2. Instaliuojam git:
+::
+
+	sudo apt-get install git
+
+
+3. Jei neinstaliuotas PostgreSQL, tai:
+::
+
+	sudo apt-get install postgresql postgresql-contrib
+
+
+4. Nebūtina, bet naudojamas Pillow duombazės struktūros įrasymui į paveiksliuką:
+::
+
+	sudo apt-get install libjpeg8-dev zlib1g-dev
+
+
+5. Instaliuojam PostgreSQL - Python reikalavimus:
+::
+
+	sudo apt-get install python-psycorg2
+	sudo apt-get install libpq-dev
+
+
+6. Sukuriam virtualios aplinkos katalogą:
+::
+	
+	mkdir ~/.virtualenvs
+
+
+7. Instaliuojam pitono virtualią aplinką:
+::
+
+	sudo apt-get install python3-virtualenv
+
+
+8. Sukuriam virtualią aplinką:
+::
+
+	cd ~/.virtualenvs/
+	virtualenv djangovp
+	
+
+9. Aktyvuojam virtualią aplinką:
+::
+
+	source djangovp/bin/activate
+
+
+10. Sukuriam projektų katalogą ir klonuojam į jį git repositoriumą:
+::
+
+	mkdir ~/projects/
+	cd ~/projects/
+	git clone http://github.com/rimukas/vp_django.git vp
+	cd vp/vp/
+
+
+11. Dabar reikia patikrinti arba pakeisti duombazės vartotojo vardą ir slaptažodį:
+::
+	
+	nano settings.py
+
+
+12. Instaliuojam pip reikalavimus: 
+::	
+
+	cd ..
+	pip install -r requirements.txt
+
+
+13. Sukuriam duombazės vartotoją (čia *vpadmin*):
+::
+
+	sudo -u postgres createuser -P vpadmin
+
+
+14. Sukuriam duombazę (čia *vp*, nurodoma settings.py faile) ir priskirim jai ką tik sukurtą vartotoją, kuris bus duombazės savininkas:
+::
+	
+	sudo -u postgres createdb -O vpadmin vp
+
+15. Atliekam duombazės migraciją:
+::
+
+	./manage.py migrate
+
+16. Sukuriam Django svetainės administratorių:
+::
+
+	./manage.py createsuperuser
+
+
+17. Jei viskas daroma virtualioje mašinoje, tai reikia pasižiūrėti jos IP adresą (turi būti nustatytas *bridge mode*):
+pasiziureti, kos IP adresas (tarkim, 192.168.2.133):
+::
+
+	ifconfig | grep addr
+
+18. Tarkim, adresas buvo 192.168.2.133. Tada:
+::
+
+	./manage.py runserver 192.168.2.133:800
+
+19. Toliau nueinam į *host* mašiną ir interneto naršyklės lange rašom: *
+::
+
+	192.168.2.133:800/admin
+
+
+20. Turi atsiverti administravimo panelis.
+
+21. Jei viskas daroma lokaliame kompiuteryje, tai žingsnius 17, 18, 19, 20 galima praleisti. Tada reikia tiesiog įvykdyti komandą:
+::
+
+	./manage.py runserver
+
+ir naršyklėje atsidaryti puslapį, kuris nurodytas įvykdžius aukščiau esančią komandą.
+

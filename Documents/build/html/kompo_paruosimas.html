@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Kompiuterio paruošimas ir sistemos įdiegimas &mdash; VP 0.1.0 documentation</title>
+  <title>Kompiuterio paruošimas &mdash; VP 0.1.0 documentation</title>
   
 
   
@@ -33,9 +33,7 @@
         <link rel="index" title="Indeksas"
               href="genindex.html"/>
         <link rel="search" title="Paieška" href="search.html"/>
-    <link rel="top" title="VP 0.1.0 documentation" href="index.html"/>
-        <link rel="next" title="Bendros sąvokos ir susitarimai" href="savokos.html"/>
-        <link rel="prev" title="Apie projektą" href="apie.html"/> 
+    <link rel="top" title="VP 0.1.0 documentation" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,10 +83,10 @@
             
             
                 <p class="caption"><span class="caption-text">Turinys:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="apie.html">Apie projektą</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Kompiuterio paruošimas ir sistemos įdiegimas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="savokos.html">Bendros sąvokos ir susitarimai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="idiegimas.html">Kompiuterio paruošimas ir sistemos įdiegimas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pradzia.html">Darbo pradžia</a></li>
 </ul>
 
@@ -120,11 +118,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>Kompiuterio paruošimas ir sistemos įdiegimas</li>
+    <li>Kompiuterio paruošimas</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/idiegimas.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/kompo_paruosimas.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -134,158 +132,106 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="kompiuterio-paruosimas-ir-sistemos-idiegimas">
-<h1>Kompiuterio paruošimas ir sistemos įdiegimas<a class="headerlink" href="#kompiuterio-paruosimas-ir-sistemos-idiegimas" title="Nuoroda į šią antraštę">¶</a></h1>
-<p>Toliau bus aprašomas sistemos įdiegimas darbui lokaliame tinkle. Čia kaip pavyzdys bus naudojama Linux Ubuntu Server, nors tinka bet kokia Linux, MacOS ar Windows operacinė sistema, fizinė ar virtuali.</p>
-<p>Diegimas susideda iš šių etapų:</p>
-<blockquote>
-<div><ul class="simple">
-<li><strong>Python 3.5+</strong>;</li>
-<li><strong>pip</strong>;</li>
-<li><strong>git</strong>.</li>
-<li><strong>PostgreSQL</strong></li>
-<li><strong>virtualenv</strong></li>
-<li><strong>git repositoriumo klonavimas iš GitHub</strong></li>
-<li><strong>pip reikalavimų instaliavimas iš requirements.txt</strong></li>
-</ul>
-</div></blockquote>
-<p>Toliau aprašomas visas procesas smulkiau. Aišku, jei kompiuteryje jau yra kai kurie komponentai, tai tuos žingsnius galima praleisti. Taip pat nepamirštam, kad viską galima daryti <em>copy-paste</em> į terminalo langą ;)</p>
+  <div class="section" id="kompiuterio-paruosimas">
+<h1>Kompiuterio paruošimas<a class="headerlink" href="#kompiuterio-paruosimas" title="Nuoroda į šią antraštę">¶</a></h1>
+<p>Nepamirštam, kad viską galima daryti copy-paste į terminalo langą ;)</p>
 <p>1. Atnaujinam indeksus:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">update</span>
 </pre></div>
 </div>
-<p>2. Instaliuojam python3:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span>
-</pre></div>
-</div>
-<p>3. Instaliuojam pip:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
-</pre></div>
-</div>
-<p>4. Instaliuojam git:</p>
+<p>2. Instaliuojam git:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">git</span>
 </pre></div>
 </div>
-<p>5. Instaliuojam PostgreSQL:</p>
+<p>3. Jei neinstaliuotas PostgreSQL, tai:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">postgresql</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">contrib</span>
 </pre></div>
 </div>
-<p>6. Nebūtina, bet naudojamas Pillow duombazės struktūros įrasymui į paveiksliuką:</p>
+<p>4. Nebūtina, bet naudojamas Pillow duombazės struktūros įrasymui į paveiksliuką:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libjpeg8</span><span class="o">-</span><span class="n">dev</span> <span class="n">zlib1g</span><span class="o">-</span><span class="n">dev</span>
 </pre></div>
 </div>
-<p>7. Instaliuojam PostgreSQL - Python reikalavimus:</p>
+<p>5. Instaliuojam PostgreSQL - Python reikalavimus:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">psycorg2</span>
 <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libpq</span><span class="o">-</span><span class="n">dev</span>
 </pre></div>
 </div>
-<p>8. Instaliuojam pitono virtualią aplinką:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">virtualenv</span>
-</pre></div>
-</div>
-<p>9. Sukuriam virtualios aplinkos katalogą:</p>
+<p>6. Sukuriam virtualios aplinkos katalogą:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">mkdir</span> <span class="o">~/.</span><span class="n">virtualenvs</span>
 </pre></div>
 </div>
-<p>10. Sukuriam virtualią aplinką:</p>
+<p>7. Instaliuojam pitono virtualią aplinką:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">virtualenv</span>
+</pre></div>
+</div>
+<p>8. Sukuriam virtualią aplinką:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">cd</span> <span class="o">~/.</span><span class="n">virtualenvs</span><span class="o">/</span>
 <span class="n">virtualenv</span> <span class="n">djangovp</span>
 </pre></div>
 </div>
-<p>11. Aktyvuojam virtualią aplinką:</p>
+<p>9. Aktyvuojam virtualią aplinką:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">source</span> <span class="n">djangovp</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
 </pre></div>
 </div>
-<p>12. Sukuriam projektų katalogą ir klonuojam į jį git repositoriumą:</p>
+<p>10. Sukuriam projektų katalogą ir klonuojam į jį git repositoriumą:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">mkdir</span> <span class="o">~/</span><span class="n">projects</span><span class="o">/</span>
 <span class="n">cd</span> <span class="o">~/</span><span class="n">projects</span><span class="o">/</span>
 <span class="n">git</span> <span class="n">clone</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">rimukas</span><span class="o">/</span><span class="n">vp_django</span><span class="o">.</span><span class="n">git</span> <span class="n">vp</span>
 <span class="n">cd</span> <span class="n">vp</span><span class="o">/</span><span class="n">vp</span><span class="o">/</span>
 </pre></div>
 </div>
-<p>13. Dabar reikia patikrinti arba pakeisti duombazės vartotojo vardą ir slaptažodį:</p>
+<p>11. Dabar reikia patikrinti arba pakeisti duombazės vartotojo vardą ir slaptažodį:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">nano</span> <span class="n">settings</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>14. Instaliuojam pip reikalavimus:</p>
+<p>12. Instaliuojam pip reikalavimus:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">cd</span> <span class="o">..</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
-<p>15. Sukuriam duombazės vartotoją (čia <em>vpadmin</em>):</p>
+<p>13. Sukuriam duombazės vartotoją (čia <em>vpadmin</em>):</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">createuser</span> <span class="o">-</span><span class="n">P</span> <span class="n">vpadmin</span>
 </pre></div>
 </div>
-<p>16. Sukuriam duombazę (čia <em>vp</em>, nurodoma settings.py faile) ir priskirim jai ką tik sukurtą vartotoją, kuris bus duombazės savininkas:</p>
+<p>14. Sukuriam duombazę (čia <em>vp</em>, nurodoma settings.py faile) ir priskirim jai ką tik sukurtą vartotoją, kuris bus duombazės savininkas:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">createdb</span> <span class="o">-</span><span class="n">O</span> <span class="n">vpadmin</span> <span class="n">vp</span>
 </pre></div>
 </div>
-<p>17. Atliekam duombazės migraciją:</p>
+<p>15. Atliekam duombazės migraciją:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
 </pre></div>
 </div>
-<p>18. Sukuriam Django svetainės administratorių:</p>
+<p>16. Sukuriam Django svetainės administratorių:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
 </pre></div>
 </div>
-<p>19. Jei viskas daroma virtualioje mašinoje, tai reikia pasižiūrėti jos IP adresą (turi būti nustatytas <em>bridge mode</em>):</p>
+<p>17. Jei viskas daroma virtualioje mašinoje, tai reikia pasižiūrėti jos IP adresą (turi būti nustatytas <em>bridge mode</em>):
+pasiziureti, kos IP adresas (tarkim, 192.168.2.133):</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">ifconfig</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">addr</span>
 </pre></div>
 </div>
-<p>20. Tarkim, adresas buvo 192.168.2.133. Tada:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">2.133</span><span class="p">:</span><span class="mi">8000</span>
+<p>18. Tarkim, adresas buvo 192.168.2.133. Tada:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">2.133</span><span class="p">:</span><span class="mi">800</span>
 </pre></div>
 </div>
-<p>21. Toliau nueinam į <em>host</em> mašiną ir interneto naršyklės lange rašom:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="mf">192.168</span><span class="o">.</span><span class="mf">2.133</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">admin</span>
+<p>19. Toliau nueinam į <em>host</em> mašiną ir interneto naršyklės lange rašom: *</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="mf">192.168</span><span class="o">.</span><span class="mf">2.133</span><span class="p">:</span><span class="mi">800</span><span class="o">/</span><span class="n">admin</span>
 </pre></div>
 </div>
-<p>Turi atsiverti administravimo panelis.</p>
-<p>22. Jei viskas daroma lokaliame kompiuteryje, tai žingsnius 19, 20, 21 galima praleisti. Tada reikia tiesiog įvykdyti komandą:</p>
+<ol class="arabic simple" start="20">
+<li>Turi atsiverti administravimo panelis.</li>
+</ol>
+<p>21. Jei viskas daroma lokaliame kompiuteryje, tai žingsnius 17, 18, 19, 20 galima praleisti. Tada reikia tiesiog įvykdyti komandą:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="o">./</span><span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runserver</span>
 </pre></div>
 </div>
 <p>ir naršyklėje atsidaryti puslapį, kuris nurodytas įvykdžius aukščiau esančią komandą.</p>
-<p><strong>Keletas būtiniausių PostgreSQL duombazės komandų:</strong></p>
-<p>Prisijungti super administratoriaus vardu prie duombazės komandinio lango:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">postgres</span> <span class="n">psql</span>
-</pre></div>
-</div>
-<p>Rodyti visas duombazes (duombazės komandiniame lange):</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">postgres</span><span class="o">=</span><span class="c1">#\l</span>
-</pre></div>
-</div>
-<p>Rodyti roles:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">postgres</span><span class="o">=</span><span class="c1">#\du</span>
-</pre></div>
-</div>
-<p>Jei pamiršom duombazės vartotojo slaptažodį arba šiaip jį norim pakeisti:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">postgres</span><span class="o">=</span><span class="c1">#ALTER USER user_name WITH PASSWORD &#39;password&#39;;</span>
-</pre></div>
-</div>
-<p>Suteikti visas teises vartotojui į duombazę:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">postgres</span><span class="o">=</span><span class="c1">#GRANT ALL PRIVILEGES ON DATABASE db_name TO user_name;</span>
-</pre></div>
-</div>
-<p>PostgreSQL serverio perkrovimas:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">postgresql</span> <span class="n">reload</span>
-</pre></div>
-</div>
 </div>
 
 
            </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="savokos.html" class="btn btn-neutral float-right" title="Bendros sąvokos ir susitarimai" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="apie.html" class="btn btn-neutral" title="Apie projektą" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

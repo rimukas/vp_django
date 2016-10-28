@@ -10,10 +10,10 @@ Welcome to VP's documentation!
    :maxdepth: 12
    :caption: Turinys:
 
-   apie
+   apie   
+   idiegimas
    savokos
    pradzia
-   idiegimas
 
 
 

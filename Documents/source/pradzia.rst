@@ -1,24 +1,18 @@
 Darbo pradžia
 -------------
 
-Įdiegus programą į serverį ir sukūrus PostgreSQL duomenų bazę, pirmiausiai reikia sukurti super administratorių, kuris pridės ir valdys kitus sistemos vartotojus. Tam yra atliekama komanda:
-
-::
-
-	python manage.py createsuperuser
-
-Po to galima paleisti serverį:
-
-::
-
-	python manage.py runserver
-
 Jungtis prie administavimo puslapio:
 
 ::
 
-	http://localserver:8000/admin
+	http://ip_address:8000/admin
 
 ir pridėti kitus vartotojus.
+
+Kai bus pridėti vartotojai, jie galės prisijungti savo vardu ir jiems pirmiausia reikės susidaryti numatomų viešųjų pirkimų planą (meniu punktas **Planas**).
+
+Kai planas yra sudarytas, tai einama į žurnalo pildymą (meniu **Žurnalas**). Čia yra surašomi numatomi sandoriai. 
+
+Kai yra sudarytas bent vienas sandoris, tai prie jo yra "prikabinama" iš pardavėjo gauta sąskaita faktūra (arba kelios faktūros).
 
 
