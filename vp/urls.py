@@ -63,6 +63,8 @@ urlpatterns += [
 # ataskaitu isvedimas i pdf
 urlpatterns += [
     url(r'^users_pdf/$', views.print_users, name='users_pdf'),
+    url(r'^planas_pdf/$', views.print_planas, name='planas_pdf'),
+    url(r'^ivykdymas_pdf/$', views.print_ivykdymas, name='ivykdymas_pdf'),
 
 ]
 

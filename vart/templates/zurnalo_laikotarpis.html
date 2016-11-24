@@ -8,11 +8,12 @@
 
         <div class="panel-heading">Pasirink rodomą laikotarpį</div>
         <div class="panel-body">
-            <div class="ws-datepicker">
-                <input id="datefrom" name="dateFrom" type="text" value="{{ nuo_kada|date:'Y-m-d' }}">
-                ~ <input id="dateto" name="dateTo" type="text" value="{{ iki_kada|date:'Y-m-d' }}">
+            <div class="datepicker">
+                <input class="date datefrom" name="dateFrom" type="text" value="{{ nuo_kada|date:'Y-m-d' }}">
+                ~ <input class="date dateto" name="dateTo" type="text" placeholder="YYYY-MM-DD" value="{{ iki_kada|date:'Y-m-d' }}">
             </div>
             <br><br>
+
 
 
             <form action="#" method="post">{% csrf_token %}
@@ -60,11 +61,19 @@
 
     <script>
         $(document).ready(function () {
+            $(".date").datePicker({
+                        sundayBased: false,
+                        months: ['Sausis', 'Vasaris', 'Kovas', 'Balandis', 'Gegužė', 'Birželis', 'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis'],
+                        weekDays: ['Sk', 'Pr', 'An', 'Tr', 'Kt', 'Pn', 'Št'],
+                        todayText: 'siandien',
+                        equalHight: true
+                    }
+            );
             var element = document.getElementById("m2");
             element.classList.add("active");
-            $(function () {
-                $(".ws-datepicker").wsCalendar({"image-base-url": "{% static '/vart/images/' %}"});
-            });
+            //$(function () {
+             //   $(".ws-datepicker").wsCalendar({"image-base-url": "{% static '/vart/images/' %}"});
+            //});
             $("a.kodas_click").click(function () {
                 var id = $(this).attr("id");
                 $("#vpkodas").html($("#" + id).html());
@@ -77,10 +86,37 @@
                 }
             });
             $("form").submit(function () {
-                $("#id_date_from").val($("#datefrom").val());
-                $("#id_date_to").val($("#dateto").val());
+                $("#id_date_from").val($(".datefrom").val());
+                $("#id_date_to").val($(".dateto").val());
                 $("input#id_kodas").val($("a#" + id + ".kodas_click > span.hidden.tik-kodas").html());
             })
+
+            // pataiso bet kaip ivesta data
+            $(".datefrom").change(function () {
+                var data = $(".datefrom").val();
+                if (data.length == 8) {
+                    data = data.slice(0,4) + "-" + data.slice(4,6) + "-" + data.slice(6,8);
+                }
+                else {
+                    data = data.split(/[.,\/ -]/);
+                    data = data[0] + "-" + data[1] + "-" + data[2];
+                }
+                $(".datefrom").val(data);
+
+
+            });
+
+            $(".dateto").change(function () {
+                var data = $(".dateto").val();
+                if (data.length == 8) {
+                    data = data.slice(0,4) + "-" + data.slice(4,6) + "-" + data.slice(6,8);
+                }
+                else {
+                    data = data.split(/[.,\/ -]/);
+                    data = data[0] + "-" + data[1] + "-" + data[2];
+                }
+                $(".dateto").val(data);
+            });
 
 
         })

@@ -1,3 +1,4 @@
+templated_docs
 decorator==4.0.10
 Django==1.10.1
 django-braces==1.9.0

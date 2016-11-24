@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="{% static "/vart/css/ws-calendar.default.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-html5-1.2.2/b-print-1.2.2/fh-3.1.2/r-2.1.0/datatables.min.css"/>
-
+    <link rel="stylesheet" href="{% static "/vart/js/datepicker/themes/white/boilerplate.css" %}">
+    <link rel="stylesheet" href="{% static "/vart/js/datepicker/themes/white/datePicker.css" %}">
 
     <style>
         body {
@@ -38,6 +39,7 @@
 <script>window.jQuery || document.write('<script src="{% static "/vart/jquery-ui.min.js" %}"><\/script>')</script>
 <!-- WS Calendar -->
 <script type="text/javascript" src="{% static "/vart/js/ws-calendar-min.js" %}"></script>
+<script type="text/javascript" src="{% static "/vart/js/datepicker/jqDatePicker.min.js" %}"></script>
 <!-- Bootstrap JS CDN -->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- Bootstrap JS local fallback -->
@@ -56,6 +58,7 @@
 
 <!-- DataTables -->
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-html5-1.2.2/b-print-1.2.2/fh-3.1.2/r-2.1.0/datatables.min.js"></script>
+
 
 <!-- Navbar -->
 
@@ -76,6 +79,25 @@
 
                     <li id="m1"><a href="{% url 'planas' %}">Planas</a></li>
                     <li id="m2"><a href="{% url 'laikotarpis' %}">Žurnalo pildymas</a></li>
+                    
+
+
+ <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ataskaitos <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'ivykdymas_pdf' %}">Įvykdyti pirkimai per metus</a></li>
+            <li><a href="{% url 'planas_pdf' %}">Mano planas</a></li>
+            <li><a href="#">Dar kažkas</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Papildoma ataskaita</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Ir dar viena papildoma ataskaita</a></li>
+          </ul>
+        </li>
+
+
+
+
 
                 </ul>
             {% endif %}

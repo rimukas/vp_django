@@ -1,4 +1,4 @@
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Max
 from django.views import generic
 from braces import views
 from vart.forms import RegistrationForm, LoginForm
@@ -12,7 +12,6 @@ from datetime import date
 class HomePageView(generic.TemplateView):
     """ Pagrindinis (home) puslapis.
 
-    TODO:
     Jame yra rodoma atskira informacija prisijungusiems ir
     neprisijungusiems vartotojams.
 
@@ -20,8 +19,7 @@ class HomePageView(generic.TemplateView):
     template_name = 'notlogged.html'
 
     def get_context_data(self, **kwargs):
-        # turbut nereikalingas
-        # context = super(HomePageView, self).get_context_data(**kwargs)
+        context = super(HomePageView, self).get_context_data(**kwargs)
         user_name = self.request.user.username
 
         data_nuo = date(date.today().year, 1, 1)
@@ -57,15 +55,15 @@ class HomePageView(generic.TemplateView):
             annotate(
             sf_count=Count('sf__sf'),
             sf_sum=Sum('sf__suma'),
-            proc=(Sum('sf__suma')/Sum('kodas__islaidos'))*100)
+            proc=(Sum('sf__suma')/Max('kodas__islaidos'))*100)
 
-        context = {
+        context.update({
             'fakturos': fakturos,
             'username': self.request.user.username,
             'data_nuo': data_nuo,
             'data_iki': data_iki,
             'laikotarpis': str(metai),
-        }
+        })
         return context
 
 
@@ -124,3 +122,4 @@ class LogOutView(
         logout(request)
         self.messages.success("Tu atsijungei. Norint peržiūrėti ar suvesti duomenis turi vėl prisijungti.")
         return super(LogOutView, self).get(request, *args, **kwargs)
+

@@ -18,7 +18,7 @@ def sutartis_view(request, kodas):
     """
     data_cookie = request.COOKIES.get('date_to')
     if data_cookie is None:
-        data_iki = date(date.today())
+        data_iki = date.today()
     else:
         data_iki = datetime.strptime(data_cookie, '%Y-%m-%d')
 
@@ -97,7 +97,7 @@ class SutartisUpdate(
 
 
 @login_required()
-def sutartis_copy(id_pk):
+def sutartis_copy(request, id_pk):
     """ Kopijuoja sutarti. Atidaro forma redagavimui is klases SutartisUpdate (update_form.html).
 
     Kopijavimas padarytas tam, kad maziau duomenu reiketu suvedineti ranka.
@@ -107,6 +107,7 @@ def sutartis_copy(id_pk):
     :param id_pk:
     :return:
     """
+
     nauja = Sutartis.objects.get(pk=id_pk)
     nauja.pk = None
     nauja.save()

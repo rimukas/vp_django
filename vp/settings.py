@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'vart',
     'django_extensions',
+    'templated_docs',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -132,3 +133,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 INTERNAL_IPS = '127.0.0.1'
+
+TEMPLATED_DOCS_LIBREOFFICE_PATH = '/usr/lib/libreoffice/program'
