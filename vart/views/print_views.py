@@ -29,9 +29,14 @@ def print_planas(request):
 
 
 def print_ivykdymas(request):
+    """
+    Pirkimu plano ivykdymo spausdintinis dokumentas
+    :param request:
+    :return:
+    """
     doctype = 'pdf'
 
-    metai = date.today().year
+    metai = date.today().year  # TODO padaryti pasirenkamus metus
     sutartys = Sutartis.objects.filter(data__year=metai)
 
     # dar prafiltruojam sutartis pagal prisijungusio vartotojo VP kodus (visus),
@@ -65,6 +70,44 @@ def print_ivykdymas(request):
 
     filename = fill_template('reports/ivykdymas.odt', context, output_format=doctype)
     visible_filename = 'ivykdymas.{}'.format(doctype)
+
+    return FileResponse(filename, visible_filename)
+
+
+def print_zurnalas(request):
+    """
+    Pirkimu zurnalo spausdintinis dokumentas, kuriame atvaizduojamos visos ivestos saskaitos fakturos
+    :param request:
+    :return:
+    """
+    doctype = 'pdf'
+
+    metai = date.today().year  # TODO padaryti pasirenkamus metus
+    sutartys = Sutartis.objects.filter(data__year=metai)
+
+    # dar prafiltruojam sutartis pagal prisijungusio vartotojo VP kodus (visus),
+    # kad neimtu kitu vartotoju ivestu sutarciu
+    user_name = request.user.username
+    planas = Planas.objects.filter(organizatorius=user_name)
+    sut_id = sutartys.filter(kodas__in=planas)
+
+    fakturos = sut_id.values(
+        'kodas__kodas',
+        'kodas__preke',
+        'kodas__islaidos',
+        'data', 'tiekejas',
+        'sf__sf', 'sf__data',
+        'sf__suma',
+        'sf__pavadinimas').order_by('kodas__kodas', 'sf__data', 'tiekejas')
+
+    context = {
+        'fakturos': fakturos,
+        'username': User.objects.get(username=user_name),
+        'laikotarpis': str(metai),
+    }
+
+    filename = fill_template('reports/zurnalas.odt', context, output_format=doctype)
+    visible_filename = 'zurnalas.{}'.format(doctype)
 
     return FileResponse(filename, visible_filename)
 

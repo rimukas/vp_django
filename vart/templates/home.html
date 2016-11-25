@@ -4,6 +4,7 @@
 
     {% block content %}
         {% if username %}
+
             <div><h3>Įvykdytų pirkimų apžvalga</h3></div>
        <div>Rodomi {{ laikotarpis }} metų duomenys</div><br>
         {% for f in fakturos %}
@@ -15,8 +16,8 @@
                         {{ f.sf_count }}
                     </strong>; bendra sąsk. faktūrų suma:
                     <strong>
-                        {{ f.sf_sum }}
-                    </strong>; plano įvykdymas proc.:
+                        {{ f.sf_sum }};
+                    </strong>plano įvykdymas:
                     <strong>
                         {% if f.proc > 100 %}
                             <span class="alert-danger">

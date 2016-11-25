@@ -49,6 +49,9 @@
         var element = document.getElementById("m1");
         element.classList.add("active");
         $("#table_planas").DataTable({
+            "stateSave": true,
+            "stateDuration": 0,
+            "lengthMenu": [ 5, 10, 20, 50, 100, 1000 ],
             language: {
                 url: "{% static "/vart/i18n/Lithuanian.json" %}"
              }

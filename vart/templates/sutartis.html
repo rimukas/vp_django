@@ -34,7 +34,6 @@
         {% for k in kodas_filtered %}
             <tr>
                 <td style="white-space:nowrap;">
-                    {{ k.id }}
                     <a class="btn btn-primary" role="button"
                        href={% url 'sutartis_update' id_pk=k.id %} data-toggle="tooltip" title="Redaguoti eilutę">
                         <span class="glyphicon glyphicon-edit"></span>
@@ -87,6 +86,7 @@
             $("#table_sutartis").DataTable({
                     "stateSave": true,
                     "stateDuration": 0,
+                    "lengthMenu": [ 5, 10, 20, 50, 100, 1000 ],
                         "columnDefs": [
                             {
                                 "orderable": false,

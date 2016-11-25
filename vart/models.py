@@ -136,3 +136,4 @@ class Sf(models.Model):
     class Meta:
         verbose_name = "Sąskaitos faktūros"
         verbose_name_plural = "Sąskaitos faktūros"
+        ordering = ['data']
