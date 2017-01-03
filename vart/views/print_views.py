@@ -25,7 +25,7 @@ def print_planas(request):
     filename = fill_template('reports/planas.odt', context, output_format=doctype)
     visible_filename = 'planas.{}'.format(doctype)
 
-    return FileResponse(filename, visible_filename)
+    return FileResponse(filename, visible_filename, delete=False)
 
 
 def print_ivykdymas(request):

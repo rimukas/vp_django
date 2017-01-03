@@ -132,6 +132,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = "/var/www/vp/vart/static/"
+
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
 INTERNAL_IPS = '127.0.0.1'
 
 TEMPLATED_DOCS_LIBREOFFICE_PATH = '/usr/lib/libreoffice/program'
