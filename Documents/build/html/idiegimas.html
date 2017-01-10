@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Kompiuterio paruošimas ir sistemos įdiegimas &mdash; VP 0.1.0 documentation</title>
+  <title>Kompiuterio paruošimas ir sistemos įdiegimas &mdash; VP last documentation</title>
   
 
   
@@ -33,8 +33,8 @@
         <link rel="index" title="Indeksas"
               href="genindex.html"/>
         <link rel="search" title="Paieška" href="search.html"/>
-    <link rel="top" title="VP 0.1.0 documentation" href="index.html"/>
-        <link rel="next" title="Bendros sąvokos ir susitarimai" href="savokos.html"/>
+    <link rel="top" title="VP last documentation" href="index.html"/>
+        <link rel="next" title="Paleidimas per Apache serverį" href="apache.html"/>
         <link rel="prev" title="Apie projektą" href="apie.html"/> 
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                0.1.0
+                last
               </div>
             
           
@@ -88,6 +88,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="apie.html">Apie projektą</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Kompiuterio paruošimas ir sistemos įdiegimas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apache.html">Paleidimas per Apache serverį</a></li>
 <li class="toctree-l1"><a class="reference internal" href="savokos.html">Bendros sąvokos ir susitarimai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pradzia.html">Darbo pradžia</a></li>
 </ul>
@@ -160,6 +161,7 @@
 </div>
 <p>3. Instaliuojam pip:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
+<span class="n">pip3</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pip</span>
 </pre></div>
 </div>
 <p>4. Instaliuojam git:</p>
@@ -170,7 +172,7 @@
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">postgresql</span> <span class="n">postgresql</span><span class="o">-</span><span class="n">contrib</span>
 </pre></div>
 </div>
-<p>6. Nebūtina, bet naudojamas Pillow duombazės struktūros įrasymui į paveiksliuką:</p>
+<p>6. Nebūtina, bet šios bibliotekos naudojamos Pillow duombazės struktūros įrasymui į paveiksliuką:</p>
 <div class="highlight-default"><div class="highlight"><pre><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libjpeg8</span><span class="o">-</span><span class="n">dev</span> <span class="n">zlib1g</span><span class="o">-</span><span class="n">dev</span>
 </pre></div>
 </div>
@@ -252,19 +254,19 @@
 </pre></div>
 </div>
 <p>Rodyti visas duombazes (duombazės komandiniame lange):</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">postgres</span><span class="o">=</span><span class="c1">#\l</span>
+<div class="highlight-default"><div class="highlight"><pre>\<span class="n">l</span>
 </pre></div>
 </div>
 <p>Rodyti roles:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">postgres</span><span class="o">=</span><span class="c1">#\du</span>
+<div class="highlight-default"><div class="highlight"><pre>\<span class="n">du</span>
 </pre></div>
 </div>
 <p>Jei pamiršom duombazės vartotojo slaptažodį arba šiaip jį norim pakeisti:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">postgres</span><span class="o">=</span><span class="c1">#ALTER USER user_name WITH PASSWORD &#39;password&#39;;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">ALTER</span> <span class="n">USER</span> <span class="n">user_name</span> <span class="n">WITH</span> <span class="n">PASSWORD</span> <span class="s1">&#39;password&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Suteikti visas teises vartotojui į duombazę:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">postgres</span><span class="o">=</span><span class="c1">#GRANT ALL PRIVILEGES ON DATABASE db_name TO user_name;</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">GRANT</span> <span class="n">ALL</span> <span class="n">PRIVILEGES</span> <span class="n">ON</span> <span class="n">DATABASE</span> <span class="n">db_name</span> <span class="n">TO</span> <span class="n">user_name</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>PostgreSQL serverio perkrovimas:</p>
@@ -280,7 +282,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="savokos.html" class="btn btn-neutral float-right" title="Bendros sąvokos ir susitarimai" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="apache.html" class="btn btn-neutral float-right" title="Paleidimas per Apache serverį" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="apie.html" class="btn btn-neutral" title="Apie projektą" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -314,7 +316,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.0',
+            VERSION:'last',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

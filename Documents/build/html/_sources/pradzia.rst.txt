@@ -13,6 +13,6 @@ Kai bus pridėti vartotojai, jie galės prisijungti savo vardu ir jiems pirmiaus
 
 Kai planas yra sudarytas, tai einama į žurnalo pildymą (meniu **Žurnalas**). Čia yra surašomi numatomi sandoriai. 
 
-Kai yra sudarytas bent vienas sandoris, tai prie jo yra "prikabinamos" iš pardavėjo gauta sąskaita faktūra (arba kelios faktūros).
+Kai yra sudarytas bent vienas sandoris, tai prie jo yra "prikabinama" iš pardavėjo gauta sąskaita faktūra (arba kelios faktūros).
 
 

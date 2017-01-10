@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Apie projektą &mdash; VP last documentation</title>
+  <title>Paleidimas per Apache serverį &mdash; VP last documentation</title>
   
 
   
@@ -34,8 +34,8 @@
               href="genindex.html"/>
         <link rel="search" title="Paieška" href="search.html"/>
     <link rel="top" title="VP last documentation" href="index.html"/>
-        <link rel="next" title="Kompiuterio paruošimas ir sistemos įdiegimas" href="idiegimas.html"/>
-        <link rel="prev" title="Welcome to VP’s documentation!" href="index.html"/> 
+        <link rel="next" title="Bendros sąvokos ir susitarimai" href="savokos.html"/>
+        <link rel="prev" title="Kompiuterio paruošimas ir sistemos įdiegimas" href="idiegimas.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -86,9 +86,9 @@
             
                 <p class="caption"><span class="caption-text">Turinys:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Apie projektą</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apie.html">Apie projektą</a></li>
 <li class="toctree-l1"><a class="reference internal" href="idiegimas.html">Kompiuterio paruošimas ir sistemos įdiegimas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="apache.html">Paleidimas per Apache serverį</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Paleidimas per Apache serverį</a></li>
 <li class="toctree-l1"><a class="reference internal" href="savokos.html">Bendros sąvokos ir susitarimai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pradzia.html">Darbo pradžia</a></li>
 </ul>
@@ -121,11 +121,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>Apie projektą</li>
+    <li>Paleidimas per Apache serverį</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/apie.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/apache.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -135,10 +135,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="apie-projekta">
-<h1>Apie projektą<a class="headerlink" href="#apie-projekta" title="Nuoroda į šią antraštę">¶</a></h1>
-<p>Viešųjų pirkimų žurnalo pildymo programa organizacijos viduje.
-Programa sukurta naudojant Django <em>framework</em>&#8216;ą ir PostgreSQL atviro kodo duomenų bazę, veikia per naršyklę, tad ją galima paleisti tiek lokaliam tinkle, tiek per internetą.</p>
+  <div class="section" id="paleidimas-per-apache-serveri">
+<h1>Paleidimas per Apache serverį<a class="headerlink" href="#paleidimas-per-apache-serveri" title="Nuoroda į šią antraštę">¶</a></h1>
+<p>Toliau aprašomas pats paprasčiausias ir greičiausias būdas sistemos paleidimui per Apache serverį. Visų pirma, kompiuteryje jau turi būti įdiegtas Apache web serveris. Po to reikia instaliuoti mod_wsgi (<a class="reference external" href="https://github.com/GrahamDumpleton/mod_wsgi/tree/1abae882b904a39de6756f18a94363676208c3ff">https://github.com/GrahamDumpleton/mod_wsgi/tree/1abae882b904a39de6756f18a94363676208c3ff</a>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">pip</span> <span class="n">install</span> <span class="n">mod_wsgi</span>
+</pre></div>
+</div>
+<p>Django settings faile, INSTALLED_APPS turi būti pridėtas mod_wsgi.server:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+<span class="s1">&#39;django.contrib.admin&#39;</span><span class="p">,</span>
+<span class="s1">&#39;django.contrib.auth&#39;</span><span class="p">,</span>
+<span class="s1">&#39;django.contrib.contenttypes&#39;</span><span class="p">,</span>
+<span class="s1">&#39;django.contrib.sessions&#39;</span><span class="p">,</span>
+<span class="s1">&#39;django.contrib.messages&#39;</span><span class="p">,</span>
+<span class="s1">&#39;django.contrib.staticfiles&#39;</span><span class="p">,</span>
+<span class="s1">&#39;mod_wsgi.server&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Django settings.py faile, STATIC_ROOT kintamajame turi būti nurodyta static failų vieta (pvz. STATIC_ROOT = &#8220;/var/www/site&#8221;). Po to reikia surinkti static failus į nurodytą vietą. Paleidžiam komandą:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">collectstatic</span>
+</pre></div>
+</div>
+<p>Dabar galima paleisti Apache serverį su mod_wsgi (portas 8000), per kurį bus pasiekiama Django aplikacija:</p>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">runmodwsgi</span>
+</pre></div>
+</div>
+<p>Daugiau mod_wsgi nustatymų ir galimybių čia: <a class="reference external" href="https://github.com/GrahamDumpleton/mod_wsgi/tree/1abae882b904a39de6756f18a94363676208c3ff">https://github.com/GrahamDumpleton/mod_wsgi/tree/1abae882b904a39de6756f18a94363676208c3ff</a></p>
 </div>
 
 
@@ -148,10 +171,10 @@ Programa sukurta naudojant Django <em>framework</em>&#8216;ą ir PostgreSQL atvi
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="idiegimas.html" class="btn btn-neutral float-right" title="Kompiuterio paruošimas ir sistemos įdiegimas" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="savokos.html" class="btn btn-neutral float-right" title="Bendros sąvokos ir susitarimai" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Welcome to VP’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="idiegimas.html" class="btn btn-neutral" title="Kompiuterio paruošimas ir sistemos įdiegimas" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

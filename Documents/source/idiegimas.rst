@@ -166,24 +166,24 @@ Prisijungti super administratoriaus vardu prie duombazės komandinio lango:
 Rodyti visas duombazes (duombazės komandiniame lange):
 ::
 
-	postgres=#\l
+	\l
 
 
 Rodyti roles:
 ::
 
-	postgres=#\du
+	\du
 
 Jei pamiršom duombazės vartotojo slaptažodį arba šiaip jį norim pakeisti:
 ::
 
-	postgres=#ALTER USER user_name WITH PASSWORD 'password';
+	ALTER USER user_name WITH PASSWORD 'password';
 
 
 Suteikti visas teises vartotojui į duombazę:
 ::
 
-	postgres=#GRANT ALL PRIVILEGES ON DATABASE db_name TO user_name;
+	GRANT ALL PRIVILEGES ON DATABASE db_name TO user_name;
 
 
 PostgreSQL serverio perkrovimas:

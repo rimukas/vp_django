@@ -12,6 +12,7 @@ Welcome to VP's documentation!
 
    apie   
    idiegimas
+   apache
    savokos
    pradzia
 
